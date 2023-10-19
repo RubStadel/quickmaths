@@ -27,14 +27,17 @@ A Telegram bot through which a numbers game (credits to [Answer In Progress](htt
 * [x] implement displaying of better operator symbols (Unicode characters)
 * [ ] implement timer
 * [ ] create startOverlay
+* [ ] write short explanation of the game
+* [ ] decide on a way to display the explanation of the game
+* [ ] implement startGame function
+* [ ] **test sending data without closing the WebApp**
 * [ ] create scoreOverlay
-* [ ] create resultsOverlay
 * [ ] create resultsOverlay
 
 ### Server
 
 * [ ] set up bot in Telegram
-* [ ] design menu button layout
+* [ ] design menu button layout (also include game mode selection)
 * [ ] set up google spreadsheet
 * [ ] enable saving of data to spreadsheet
 * [ ] write logic to find and display leaderboards (global or personal)

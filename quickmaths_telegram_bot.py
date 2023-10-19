@@ -29,22 +29,81 @@ from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandl
 # bestand_table:list[list] = sh.worksheet('bestand')
 
 
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Defines a `/start` command handler.
+    Displays a menu of buttons that start their associated tasks.
+    """
+
+    # button layout to be displayed instead of the default keyboard
+    keyboard = [
+        [KeyboardButton(
+            text="Play (Classic)",
+            web_app=WebAppInfo(
+                url="https://getraenke.w3spaces.com/quickmaths/"
+            ),
+        )],
+        [KeyboardButton(
+            text="global leaderboard"
+        ),
+        KeyboardButton(
+            text="personal leaderboard"
+        )],
+    ]
+
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard, 
+        resize_keyboard=True,
+        one_time_keyboard=False,
+        is_persistent=False
+    )
+
+    # send a message to the user to explain how the bot works
+    await update.message.reply_text("Choose an action:", reply_markup=reply_markup)
+
+
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Handles all incoming messages from the user.
+
+    Calls functions to perform relevant actions when the user asks for them.
+    """
+
+    processed_text = update.message.text.lower()
+
+    if "menu" in processed_text:
+        await start(update, context)
+    elif "global" and "leaderboard" in processed_text:
+        await show_global_leaderboard(update, context)
+    elif "personal" and "leaderboard" in processed_text:
+        await show_personal_leaderboard(update, context)
+    else:
+        await update.message.reply_html(text=f"Befehl wurde nicht verstanden.")
+
+
+async def show_global_leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                              # temp !!!
+    await update.message.reply_html(text=f"This function has not been implemented yet.")
+
+
+async def show_personal_leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                            # temp !!!
+    await update.message.reply_html(text=f"This function has not been implemented yet.")
+
+
 def main() -> None:
     """
     Starts the bot and adds handlers to it.
     """
 
-    application = Application.builder().token(
-        "6339848456:AAGFHw9hL7HIZTs1GPgkfYz3Jdb9VWNaXFA").build()
+    # application = Application.builder().token(
+    #     "REPLACE_WITH_BOT_TOKEN!!!").build()
 
-    # application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("start", start))
     # application.add_handler(CommandHandler("input", new_input))
     # application.add_handler(CommandHandler("list", show_list))
     # application.add_handler(CommandHandler("prognose", show_forecast))
-    # application.add_handler(CallbackQueryHandler(menu_select))
     # application.add_handler(MessageHandler(
     #     filters.StatusUpdate.WEB_APP_DATA, web_app_data))
-    # application.add_handler(MessageHandler(filters.TEXT, handle_message))
+    application.add_handler(MessageHandler(filters.TEXT, handle_message))
 
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
