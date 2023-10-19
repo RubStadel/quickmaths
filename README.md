@@ -36,7 +36,8 @@ A Telegram bot through which a numbers game (credits to [Answer In Progress](htt
 
 ### Server
 
-* [ ] set up bot in Telegram
+* [x] set up bot in Telegram (name, token, description, abouttext)
+* [ ] update bot settings in Telegram (BotFather)
 * [ ] design menu button layout (also include game mode selection)
 * [ ] set up google spreadsheet
 * [ ] enable saving of data to spreadsheet

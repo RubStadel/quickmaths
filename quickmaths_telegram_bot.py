@@ -94,8 +94,8 @@ def main() -> None:
     Starts the bot and adds handlers to it.
     """
 
-    # application = Application.builder().token(
-    #     "REPLACE_WITH_BOT_TOKEN!!!").build()
+    application = Application.builder().token(
+        "REPLACE_WITH_BOT_TOKEN!!!").build()
 
     application.add_handler(CommandHandler("start", start))
     # application.add_handler(CommandHandler("input", new_input))
