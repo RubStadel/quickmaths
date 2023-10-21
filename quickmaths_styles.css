@@ -8,6 +8,81 @@ body {
     overflow: hidden;
 }
 
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 3;
+    left: 0;
+    top: 0;
+    background-color: white;
+    overflow: hidden;
+    transition: 0.25s ease;
+}
+
+.overlay-content {
+    position: relative;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 4vh;
+}
+
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 3vh;
+    color: #f20d0d;
+    display: inline;
+    transition: 0.25s;
+}
+
+.overlay p {
+    font-size: 5vh;
+    font-weight: bolder;
+}
+
+.overlay .closebtn {
+    position: absolute;
+    top: 0.5rem;
+    right: 4rem;
+    font-size: 5rem;
+    color: #585858;
+}
+
+#howToPlayButton {
+    background-color: transparent;
+    color: black;
+    border: 2px solid black;
+}
+
+#howToPlayButton:hover {
+    background-color: transparent;
+    color: #000099;
+    border: 2px solid #000099;
+}
+
+#landingNav {
+    width: 100%;
+    /* background-color: white; */
+    background-size: 200%;
+}
+
+#landingTextField {
+    height: 35vh;
+    padding: 0 11vw;
+    text-align: justify;
+    font-size: 3vh;
+}
+
+#startButton {
+    height: 10vh;
+    width: 75vw;
+    border-radius: 2rem;
+    margin-top: 3.5vh;
+}
+
 div {
     font-size: 6vh;
     font-weight: 500;
@@ -34,7 +109,7 @@ button:hover {
     background-color: #0000e6;
 }
 
-#column{
+#column {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -53,45 +128,45 @@ button:hover {
     max-height: 11vh;
 }
 
-#topRow{
+#topRow {
     min-height: 11vh;
     max-height: 11vh;
 }
 
-#questionCount{
+#questionCount {
     font-size: 3vh;
     position: absolute;
     left: 4vw;
     top: 1.5vh;
 }
 
-#timer{
+#timer {
     font-size: 5vh;
     padding: 0 0.75rem;
     border: 2px solid black;
     border-radius: 0.5rem;
 }
 
-#mainRow{
+#mainRow {
     min-height: 30vh;
     max-height: 30vh;
 }
 
-#mainRow>div{
+#mainRow>div {
     font-size: 6.5vh;
     margin-right: 4vw;
 }
 
-#submitRow{
+#submitRow {
     min-height: 15vh;
     max-height: 15vh;
 }
 
-#submitAnswerButton{
+#submitAnswerButton {
     width: 90vw;
 }
 
-.numberButton{
+.numberButton {
     width: 33vw;
     height: 11vh;
     color: black;

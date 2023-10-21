@@ -83,32 +83,57 @@ function checkAnswer() {
     generateNewQuestion();
 }
 
-/// functions concerning the game's (pseudo) timer                                              not tested !
+/// functions concerning the game's (pseudo) timer
 
 function updateTimer() {
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
     
     if(secondsTimer.innerHTML == '59') {
-        secondsTimer.innerHTML = '0';
+        secondsTimer.innerHTML = '00';
         minutesTimer.innerHTML = +minutesTimer.innerHTML + 1;
+        minutesTimer.innerHTML.padStart(2,"0");
     } else {
         secondsTimer.innerHTML = +secondsTimer.innerHTML + 1;
+        secondsTimer.innerHTML.padStart(2,"0");
     }
 }
 
 function startTimer() {
+    let secondsTimer = document.getElementById("secondsTimer");
+    let minutesTimer = document.getElementById("minutesTimer");
+    minutesTimer.innerHTML = "00";
+    secondsTimer.innerHTML = "00";
+
     timer = setInterval(updateTimer, 1000);
 }
 
-/// function to start the game                                                                  missing !!!
+/// functions to explain how to play the game
 
-// open start overlay
-// link AIP video/website
-// (link ?) explanation
-// start timer when game is started (and start overlay is removed)
+function showHowToPlay() {
+    let btn = document.getElementById("howToPlayButton");
+    let textField = document.getElementById("landingTextField");
+    textField.innerHTML = "Correctly answer twenty maths questions.<br>The questions are randomized and include numbers up to 20.<br>The top of the page shows a timer and a counter of correct answers.";
+    btn.onclick = hideHowToPlay;
+}
 
-/// function to stop the game                                                                   unfinished !!
+function hideHowToPlay() {
+    let btn = document.getElementById("howToPlayButton");
+    let textField = document.getElementById("landingTextField");
+    textField.innerHTML = "Inspired by the mental arithmetics game originally created by <a id='linkAIP' href='https://www.youtube.com/@answerinprogress' target='_blank' rel='noopener noreferrer' title='AIP on YouTube'>    <em>Answer in Progress</em></a> in their video about math anxiety. <a id='linkAIPVideo' href='https://youtu.be/xvOkXXprG2g?si=WWNTwtRDeu39E_JY' target='_blank' rel='noopener noreferrer' title='why do people hate math'>    <ion-icon name='logo-youtube'></ion-icon></a>";
+    btn.onclick = showHowToPlay;
+}
+
+/// function to start the game
+
+function startGame() {
+    let landingNav = document.getElementById("landingNav");
+    landingNav.style.height = "0%";
+
+    startTimer();
+}
+
+/// function to stop the game                                                                      unfinished !!
 
 function stopGame() {
     clearInterval(timer);
