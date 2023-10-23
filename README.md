@@ -11,6 +11,7 @@ A Telegram bot through which a numbers game (credits to [Answer In Progress](htt
 * [x] design concept and game structure
 * [x] come up with new game modes:
   * higher numbers (e.g. up to 50)
+  * more questions (e.g. 50) or endless questions
   * other operators (e.g. modulo '%')
   * power tables (e.g. numbers squared; two to the power of x)
   * years (e.g. 2023 - 67)
@@ -29,13 +30,13 @@ A Telegram bot through which a numbers game (credits to [Answer In Progress](htt
 * [x] implement basic maths question solving
 * [x] implement displaying of better operator symbols (Unicode characters)
 * [x] implement timer
-* [ ] fix timer to show leading zeros
+* [x] fix timer to show leading zeros
 * [x] create startOverlay
 * [x] write short explanation of the game
 * [x] decide on a way to display the explanation of the game
-* [ ] implement startGame function
+* [x] implement startGame function
 * [ ] **test sending data without closing the WebApp**
-* [ ] create scoreOverlay
+* [x] create scoreOverlay
 * [ ] create resultsOverlay
 
 ### Server

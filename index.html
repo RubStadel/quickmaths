@@ -24,12 +24,12 @@
         </div>
         <div class="row" id="mainRow">
             <div id="questionOperand1">1 </div>
-            <div id="questionOperator">&#x22c5; </div>
+            <div id="questionOperator">&#x00f7; </div>
             <div id="questionOperand2">1 =</div>
             <div id="answerField"></div>
         </div>
         <div class="row" id="submitRow">
-            <button id="submitAnswerButton" onclick="checkAnswer()">Submit</button>
+            <button id="submitAnswerButton" onclick="checkAnswer()">submit</button>
         </div>
         <div class="row">
             <button class="numberButton" onclick="addChar('1')">1</button>
@@ -57,22 +57,32 @@
 		<div class="overlay-content">
             <p>quickmaths <em>Classic</em></p>
             <br><br>
-			<button id="howToPlayButton" onclick="showHowToPlay();">How to play</button><br><br>
+			<button id="howToPlayButton" onclick="showHowToPlay();">how to play</button><br><br>
             <div id="landingTextField">
                 Inspired by the mental arithmetics game originally created by 
                 <a href="https://www.youtube.com/@answerinprogress" target="_blank" rel="noopener noreferrer" title="AIP on YouTube" style="color: black;">
                     <em>Answer in Progress</em>
                 </a>
                 in their video about math anxiety. 
-                <a href="https://youtu.be/xvOkXXprG2g?si=WWNTwtRDeu39E_JY" target="_blank" rel="noopener noreferrer" title="why do people hate math">
+                <a href="https://youtu.be/xvOkXXprG2g?si=WWNTwtRDeu39E_JY" target="_blank" rel="noopener noreferrer" title="why do people hate math" style="color: #f20d0d">
                     <ion-icon name="logo-youtube"></ion-icon>
 			    </a>
             </div>
             <br>
-			<button id="startButton" onclick="startGame();">Start</button>
+			<button id="startButton" onclick="startGame();">start</button>
 		</div>
 	</div>
-    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+
+    <div id="scoreNav" class="overlay" style="height: 0%; transition: 0.4s;">
+		<div class="overlay-content">
+            <br><br>
+            <p id="scoreTextField"></p>
+			<button id="resultsButton" onclick="showResults();">results</button>
+		</div>
+	</div>
+
+    <script type="module" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>

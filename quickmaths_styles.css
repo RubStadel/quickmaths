@@ -10,14 +10,14 @@ body {
 
 .overlay {
     height: 100%;
-    width: 0;
+    width: 100%;
     position: fixed;
     z-index: 3;
     left: 0;
     top: 0;
     background-color: white;
     overflow: hidden;
-    transition: 0.25s ease;
+    transition: 0.25s ease-out;
 }
 
 .overlay-content {
@@ -33,7 +33,7 @@ body {
     padding: 8px;
     text-decoration: none;
     font-size: 3vh;
-    color: #f20d0d;
+    color: black;
     display: inline;
     transition: 0.25s;
 }
@@ -58,15 +58,8 @@ body {
 }
 
 #howToPlayButton:hover {
-    background-color: transparent;
-    color: #000099;
-    border: 2px solid #000099;
-}
-
-#landingNav {
-    width: 100%;
-    /* background-color: white; */
-    background-size: 200%;
+    color: white;
+    background-color: black;
 }
 
 #landingTextField {
@@ -83,6 +76,11 @@ body {
     margin-top: 3.5vh;
 }
 
+#scoreTextField {
+    height: 35vh;
+    padding: 0 5vw;
+}
+
 div {
     font-size: 6vh;
     font-weight: 500;
@@ -94,10 +92,10 @@ button {
     height: 7vh;
     padding: 0.25rem 0.75rem;
     margin: 0.25rem;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     outline: none;
     color: white;
-    background: #000099;
+    background: black;
     font-size: 4.25vh;
     /* disable selection */
     -webkit-user-select: none; /* Safari */
@@ -106,7 +104,9 @@ button {
 }
 
 button:hover {
-    background-color: #0000e6;
+    background-color: white;
+    color: black;
+    border: 2px solid black;
 }
 
 #column {
@@ -164,6 +164,8 @@ button:hover {
 
 #submitAnswerButton {
     width: 90vw;
+    height: 85%;
+    margin-bottom: 2.5vh;
 }
 
 .numberButton {
@@ -176,4 +178,5 @@ button:hover {
 
 .numberButton:hover {
     background-color: gainsboro;
+    border: none;
 }

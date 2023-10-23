@@ -63,7 +63,7 @@ function checkAnswer() {
     let tmp = operator.innerHTML.slice(0, 1);
     if(escape(tmp) == '%u22C5') {
         tmpOperator = '*';
-    } else if(escape(tmp) == '\u00F7') {
+    } else if(escape(tmp) == '%F7') {
         tmpOperator = '/';
     } else {
         tmpOperator = tmp;
@@ -73,7 +73,7 @@ function checkAnswer() {
 
     if(answer.innerHTML == eval(currentQuestion) && answer.innerHTML != "") {
         correctAnswers++;
-        if(correctAnswers == 20) {
+        if(correctAnswers == 2) {                                                                           // changed for testing only
             stopGame();
         }
     }
@@ -91,11 +91,9 @@ function updateTimer() {
     
     if(secondsTimer.innerHTML == '59') {
         secondsTimer.innerHTML = '00';
-        minutesTimer.innerHTML = +minutesTimer.innerHTML + 1;
-        minutesTimer.innerHTML.padStart(2,"0");
+        minutesTimer.innerHTML = `${+minutesTimer.innerHTML + 1}`.padStart(2, "0");
     } else {
-        secondsTimer.innerHTML = +secondsTimer.innerHTML + 1;
-        secondsTimer.innerHTML.padStart(2,"0");
+        secondsTimer.innerHTML = `${+secondsTimer.innerHTML + 1}`.padStart(2, "0");
     }
 }
 
@@ -120,7 +118,7 @@ function showHowToPlay() {
 function hideHowToPlay() {
     let btn = document.getElementById("howToPlayButton");
     let textField = document.getElementById("landingTextField");
-    textField.innerHTML = "Inspired by the mental arithmetics game originally created by <a id='linkAIP' href='https://www.youtube.com/@answerinprogress' target='_blank' rel='noopener noreferrer' title='AIP on YouTube'>    <em>Answer in Progress</em></a> in their video about math anxiety. <a id='linkAIPVideo' href='https://youtu.be/xvOkXXprG2g?si=WWNTwtRDeu39E_JY' target='_blank' rel='noopener noreferrer' title='why do people hate math'>    <ion-icon name='logo-youtube'></ion-icon></a>";
+    textField.innerHTML = "Inspired by the mental arithmetics game originally created by <a id='linkAIP' href='https://www.youtube.com/@answerinprogress' target='_blank' rel='noopener noreferrer' title='AIP on YouTube'>    <em>Answer in Progress</em></a> in their video about math anxiety. <a id='linkAIPVideo' href='https://youtu.be/xvOkXXprG2g?si=WWNTwtRDeu39E_JY' target='_blank' rel='noopener noreferrer' title='why do people hate math' style='color: #f20d0d'>    <ion-icon name='logo-youtube'></ion-icon></a>";
     btn.onclick = showHowToPlay;
 }
 
@@ -133,31 +131,37 @@ function startGame() {
     startTimer();
 }
 
-/// function to stop the game                                                                      unfinished !!
+/// function to stop the game                                                                      Telegram implementation not tested !
 
 function stopGame() {
     clearInterval(timer);
 
+    let scoreNav = document.getElementById("scoreNav");
+    let textField = document.getElementById("scoreTextField");
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
-    let username = Telegram.WebAppUser.firstName;
 
-    let finalTime = (+minutesTimer.innerHTML * 60) + +secondsTimer.innerHTML;
-    if(Telegram.WebAppUser.username) {
-        username = Telegram.WebAppUser.username;
-    }
+    textField.innerHTML = `score: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: 20/${totalQuestions}`;
+    scoreNav.style.height = "100%";
 
-    const data = JSON.stringify({
-        user: username, time: finalTime, questions: totalQuestions
-    })
+    // let username = Telegram.WebAppUser.firstName;
+    // if(Telegram.WebAppUser.username) {
+    //     username = Telegram.WebAppUser.username;
+    // }
 
-    Telegram.WebApp.MainButton.setText('Finish').show().onClick(function () {
-        Telegram.WebApp.sendData(data);
-        Telegram.WebApp.close();
-    });
+    // const data = JSON.stringify({
+    //     user: username, minutes: +minutesTimer.innerHTML, seconds: +secondsTimer.innerHTML, questions: totalQuestions
+    // });
 
-    // open score overlay
-    // show totalQuestions (summary)
+    // Telegram.WebApp.MainButton.setText('finish').show().onClick(function () {
+    //     Telegram.WebApp.sendData(data);
+    //     Telegram.WebApp.close();
+    // });
 }
 
-// add results overlay (displays all questions, answers given and correct answers; colorcoded, scrollable(?), Telegram.MainButton is visible)
+/// function to show the results of all questions with answers
+
+function showResults() {
+// add results overlay (displays all questions, answers given and (if different,) correct answers; colorcoded, scrollable(?))
+
+}
