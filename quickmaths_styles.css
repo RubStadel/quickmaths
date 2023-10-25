@@ -12,7 +12,7 @@ body {
     height: 100%;
     width: 100%;
     position: fixed;
-    z-index: 3;
+    z-index: 2;
     left: 0;
     top: 0;
     background-color: white;
@@ -25,7 +25,6 @@ body {
     top: 0;
     width: 100%;
     text-align: center;
-    margin-top: 30px;
     font-size: 4vh;
 }
 
@@ -44,11 +43,13 @@ body {
 }
 
 .overlay .closebtn {
-    position: absolute;
-    top: 0.5rem;
-    right: 4rem;
+    position: fixed;
+    top: -2vh;
+    right: 5vw;
     font-size: 5rem;
     color: #585858;
+    display: none;
+    transition: 0.4s;
 }
 
 #howToPlayButton {
@@ -79,6 +80,20 @@ body {
 #scoreTextField {
     height: 35vh;
     padding: 0 5vw;
+}
+
+#resultsTextField {
+    font-size: 3vh;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: normal;
+}
+
+#resultsTextField>span {
+    margin-top: 5vh;
+    line-height: 1.75;
 }
 
 div {

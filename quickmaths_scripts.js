@@ -11,8 +11,10 @@ let operators = [
     ['/', '\u00F7']
 ];
 
-let totalQuestions = 1;
-let correctAnswers = 0;
+let results = [
+    {correctAnswers: 0, questionsNeeded: 10},                                                       // changed for testing only
+];
+
 let timer;
 
 /// functions concerning the answer to the maths question
@@ -62,24 +64,26 @@ function checkAnswer() {
 
     let tmp = operator.innerHTML.slice(0, 1);
     if(escape(tmp) == '%u22C5') {
-        tmpOperator = '*';
+        tmpOperator = '* ';
     } else if(escape(tmp) == '%F7') {
-        tmpOperator = '/';
+        tmpOperator = '/ ';
     } else {
-        tmpOperator = tmp;
+        tmpOperator = tmp + " ";
     }
 
     let currentQuestion = operand1.innerHTML + tmpOperator + operand2.innerHTML.slice(0, -1);
+    let currentAnswer = eval(currentQuestion);
+    let answerIsCorrect = (answer.innerHTML == currentAnswer && answer.innerHTML != "");
 
-    if(answer.innerHTML == eval(currentQuestion) && answer.innerHTML != "") {
-        correctAnswers++;
-        if(correctAnswers == 2) {                                                                           // changed for testing only
+    if(answerIsCorrect) {
+        results[0].correctAnswers++;
+        document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers}/${results[0].questionsNeeded}`;
+        if(results[0].correctAnswers == results[0].questionsNeeded) {
             stopGame();
         }
     }
+    results.push({question: currentQuestion, actualAnswer: currentAnswer, givenAnswer: answer.innerHTML, answeredCorrectly: answerIsCorrect});
     clearAnswer();
-    totalQuestions++;
-    document.getElementById("questionCount").innerHTML = `${correctAnswers}/20`;
     generateNewQuestion();
 }
 
@@ -111,14 +115,23 @@ function startTimer() {
 function showHowToPlay() {
     let btn = document.getElementById("howToPlayButton");
     let textField = document.getElementById("landingTextField");
-    textField.innerHTML = "Correctly answer twenty maths questions.<br>The questions are randomized and include numbers up to 20.<br>The top of the page shows a timer and a counter of correct answers.";
+    textField.innerHTML = 
+    "Correctly answer twenty maths questions.<br>\
+    The questions are randomized and include numbers up to 20.<br>\
+    The top of the page shows a timer and a counter of correct answers.";
     btn.onclick = hideHowToPlay;
 }
 
 function hideHowToPlay() {
     let btn = document.getElementById("howToPlayButton");
     let textField = document.getElementById("landingTextField");
-    textField.innerHTML = "Inspired by the mental arithmetics game originally created by <a id='linkAIP' href='https://www.youtube.com/@answerinprogress' target='_blank' rel='noopener noreferrer' title='AIP on YouTube'>    <em>Answer in Progress</em></a> in their video about math anxiety. <a id='linkAIPVideo' href='https://youtu.be/xvOkXXprG2g?si=WWNTwtRDeu39E_JY' target='_blank' rel='noopener noreferrer' title='why do people hate math' style='color: #f20d0d'>    <ion-icon name='logo-youtube'></ion-icon></a>";
+    textField.innerHTML = 
+    "Inspired by the mental arithmetics game originally created by \
+    <a id='linkAIP' href='https://www.youtube.com/@answerinprogress' target='_blank' rel='noopener noreferrer' title='AIP on YouTube'>\
+        <em>Answer in Progress</em></a> \
+    in their video about math anxiety. \
+    <a id='linkAIPVideo' href='https://youtu.be/xvOkXXprG2g?si=WWNTwtRDeu39E_JY' target='_blank' rel='noopener noreferrer' title='why do people hate math' style='color: #f20d0d'>\
+        <ion-icon name='logo-youtube'></ion-icon></a>";
     btn.onclick = showHowToPlay;
 }
 
@@ -141,7 +154,7 @@ function stopGame() {
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
 
-    textField.innerHTML = `score: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: 20/${totalQuestions}`;
+    textField.innerHTML = `score: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].questionsNeeded}/${(results.length)}`;
     scoreNav.style.height = "100%";
 
     // let username = Telegram.WebAppUser.firstName;
@@ -150,7 +163,7 @@ function stopGame() {
     // }
 
     // const data = JSON.stringify({
-    //     user: username, minutes: +minutesTimer.innerHTML, seconds: +secondsTimer.innerHTML, questions: totalQuestions
+    //     user: username, minutes: +minutesTimer.innerHTML, seconds: +secondsTimer.innerHTML, questions: (results.length)
     // });
 
     // Telegram.WebApp.MainButton.setText('finish').show().onClick(function () {
@@ -159,9 +172,39 @@ function stopGame() {
     // });
 }
 
-/// function to show the results of all questions with answers
+/// functions to show and hide the results of all questions with answers
 
 function showResults() {
-// add results overlay (displays all questions, answers given and (if different,) correct answers; colorcoded, scrollable(?))
+    let resultsNav = document.getElementById("resultsNav");
+    let textField = document.getElementById("resultsTextField");
+    let closebtn = document.getElementById("resultsCloseButton");
 
+    resultsNav.style.height = "100%";
+    closebtn.style.display = "block";
+    
+    let questionResult;
+    console.log(results);
+    console.log(results.length);
+    for(let i = 1; i < results.length; i++) {
+        if (results[i].answeredCorrectly == false) {
+            questionResult = 
+            `<span style='color: darkred;'><big><b>Question ${i}</b></big><br>\
+            ${results[i].question} &ne; ${results[i].givenAnswer}<br>\
+            correct answer: ${results[i].actualAnswer}</span><br>`;
+        } else {
+            questionResult = 
+            `<span><big><b>Question ${i}</b></big><br>\
+            ${results[i].question} &#x003D; ${results[i].givenAnswer}</span><br>`;
+        }
+        textField.innerHTML = textField.innerHTML.concat(questionResult);
+    }
+}
+
+function hideResults() {
+    let resultsNav = document.getElementById("resultsNav");
+    resultsNav.style.height = "0%";
+    let textField = document.getElementById("resultsTextField");
+    textField.innerHTML = "";
+    let closebtn = document.getElementById("resultsCloseButton");
+    closebtn.style.display = "none";
 }
