@@ -1,8 +1,10 @@
 "use strict";
 
-Telegram.WebApp.ready();
-
 /// variable definitions
+
+Telegram.WebApp.ready();
+Telegram.WebApp.expand();
+Telegram.WebApp.MainButton.setText('finish').onClick(sendResults);
 
 let operators = [
     ['+', '+'],
@@ -12,7 +14,7 @@ let operators = [
 ];
 
 let results = [
-    {correctAnswers: 0, questionsNeeded: 10},                                                       // changed for testing only
+    {correctAnswers: 0, questionsNeeded: 20},
 ];
 
 let timer;
@@ -30,8 +32,7 @@ function removeChar() {
 }
 
 function clearAnswer() {
-    let answer = document.getElementById("answerField");
-    answer.innerHTML = "";
+    document.getElementById("answerField").innerHTML = "";
 }
 
 /// function for generating new maths questions
@@ -46,10 +47,9 @@ function generateNewQuestion() {
     } else {
         random = Math.floor((Math.random() * 3));
     }
-    let operator = operators[random][1];
 
     document.getElementById("questionOperand1").innerHTML = `${operand1} `;
-    document.getElementById("questionOperator").innerHTML = `${operator} `;
+    document.getElementById("questionOperator").innerHTML = `${operators[random][1]} `;
     document.getElementById("questionOperand2").innerHTML = `${operand2} =`;
 }
 
@@ -64,15 +64,17 @@ function checkAnswer() {
 
     let tmp = operator.innerHTML.slice(0, 1);
     if(escape(tmp) == '%u22C5') {
-        tmpOperator = '* ';
+        tmpOperator = '*';
     } else if(escape(tmp) == '%F7') {
-        tmpOperator = '/ ';
+        tmpOperator = '/';
     } else {
-        tmpOperator = tmp + " ";
+        tmpOperator = tmp;
     }
+    tmpOperator = tmpOperator + " ";
 
     let currentQuestion = operand1.innerHTML + tmpOperator + operand2.innerHTML.slice(0, -1);
     let currentAnswer = eval(currentQuestion);
+    currentQuestion = operand1.innerHTML + tmp.concat(" ") + operand2.innerHTML.slice(0, -1);
     let answerIsCorrect = (answer.innerHTML == currentAnswer && answer.innerHTML != "");
 
     if(answerIsCorrect) {
@@ -138,38 +140,37 @@ function hideHowToPlay() {
 /// function to start the game
 
 function startGame() {
-    let landingNav = document.getElementById("landingNav");
-    landingNav.style.height = "0%";
+    document.getElementById("landingNav").style.height = "0%";
+
+    document.getElementById("questionCount").innerHTML = `0/${results[0].questionsNeeded}`;
 
     startTimer();
 }
 
-/// function to stop the game                                                                      Telegram implementation not tested !
+/// function to stop the game
 
 function stopGame() {
     clearInterval(timer);
 
-    let scoreNav = document.getElementById("scoreNav");
     let textField = document.getElementById("scoreTextField");
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
 
     textField.innerHTML = `score: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].questionsNeeded}/${(results.length)}`;
-    scoreNav.style.height = "100%";
+    document.getElementById("scoreNav").style.height = "100%";
 
-    // let username = Telegram.WebAppUser.firstName;
-    // if(Telegram.WebAppUser.username) {
-    //     username = Telegram.WebAppUser.username;
-    // }
+    Telegram.WebApp.MainButton.show();
+}
 
-    // const data = JSON.stringify({
-    //     user: username, minutes: +minutesTimer.innerHTML, seconds: +secondsTimer.innerHTML, questions: (results.length)
-    // });
+function sendResults() {
+    let secondsTimer = document.getElementById("secondsTimer");
+    let minutesTimer = document.getElementById("minutesTimer");
 
-    // Telegram.WebApp.MainButton.setText('finish').show().onClick(function () {
-    //     Telegram.WebApp.sendData(data);
-    //     Telegram.WebApp.close();
-    // });
+    const data = JSON.stringify({
+        minutes: +minutesTimer.innerHTML, seconds: +secondsTimer.innerHTML, questions: (results.length - 1), questionsNeeded: results[0].questionsNeeded
+    });
+
+    Telegram.WebApp.sendData(data);
 }
 
 /// functions to show and hide the results of all questions with answers

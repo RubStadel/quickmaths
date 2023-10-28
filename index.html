@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body onload="document.getElementById('column').style.backgroundColor = 'white';">
     <div id="column">
         <div class="row" id="topRow">
             <div id="questionCount">0/20</div>
@@ -49,7 +49,8 @@
         <div class="row">
             <button class="numberButton" onclick="addChar('-')">&minus;</button>
             <button class="numberButton" onclick="addChar('0')">0</button>
-            <button class="numberButton" onclick="removeChar()">&#x1F818;</button>
+            <!-- <button class="numberButton" onclick="removeChar()">&#x1F818;</button> -->
+            <button class="numberButton" onclick="removeChar()">&#x2B05;</button>
         </div>
     </div>
 

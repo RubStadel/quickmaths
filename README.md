@@ -35,12 +35,12 @@ A Telegram bot through which a numbers game (credits to [Answer In Progress](htt
 * [x] write short explanation of the game
 * [x] decide on a way to display the explanation of the game
 * [x] implement startGame function
-* [ ] **test sending data without closing the WebApp**
+* [x] **test sending data without closing the WebApp -> impossible**
 * [x] create scoreOverlay
 * [x] create resultsOverlay
-* [ ] add smooth scrolling to resultsOverlay (smaller steps)
-* [ ] change symbols for resultsOverlay to include unicode characters instead of '*' and '/'
-* [ ] add 'play again' button to resultsOverlay?
+* ~~[ ] add smooth scrolling to resultsOverlay (smaller steps)~~
+* [x] change symbols for resultsOverlay to include unicode characters instead of '*' and '/'
+* ~~[ ] add 'play again' button to resultsOverlay?~~
 
 ### Server
 

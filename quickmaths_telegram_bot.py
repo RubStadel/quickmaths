@@ -1,8 +1,6 @@
-#!/usr/bin/env python
-# pylint: disable=unused-argument,wrong-import-position
-
 import pytz
 import json
+import logging
 import gspread
 
 from telegram import __version__ as TG_VER
@@ -28,6 +26,14 @@ from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandl
 # load specific worksheet
 # bestand_table:list[list] = sh.worksheet('bestand')
 
+# Enable logging
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
+# set higher logging level for httpx to avoid all GET and POST requests being logged
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
+logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
@@ -43,12 +49,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 url="https://getraenke.w3spaces.com/quickmaths/"
             ),
         )],
-        [KeyboardButton(
-            text="global leaderboard"
-        ),
-        KeyboardButton(
-            text="personal leaderboard"
-        )],
+        # [KeyboardButton(
+        #     text="global leaderboard"
+        # ),
+        # KeyboardButton(
+        #     text="personal leaderboard"
+        # )],
     ]
 
     reply_markup = ReplyKeyboardMarkup(
@@ -89,6 +95,35 @@ async def show_personal_leaderboard(update: Update, context: ContextTypes.DEFAUL
     await update.message.reply_html(text=f"This function has not been implemented yet.")
 
 
+async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                                         # temp !!
+    """
+    Prints and saves the data received from the web app.
+    """
+
+    # Name bez. Telegram-Username des Senders
+    # print(f'{update.effective_user.first_name}')
+    # print(f'{update.effective_user.username}')
+
+    # Daten laden, die die WebApp gesendet hat
+    data:dict = json.loads(update.effective_message.web_app_data.data)
+
+    # Daten an den Benutzer des Bots senden
+    
+    text:str = f"Congratulations, "
+    text = (text + f"{update.effective_user.username}.\n") if (update.effective_user.username) else (text + f"{update.effective_user.first_name}.\n")
+    text += f"You have correctly answered {data['questionsNeeded']}/{data['questions']} questions in only {data['minutes'] * 60 + data['seconds']} seconds!\n"
+    # text = text + f"time: {data['minutes'] * 60 + data['seconds']} seconds\n"
+    # text = text + f"questions: {data['questions']}\n"
+
+    await update.message.reply_html(
+        text=text,
+    )
+
+    # # neue Zeile mit den Daten in Google Tabelle einfügen
+    # table_entry = [data['mate_spezi'], data['fritz'], data['bier'], data['wasser'], data['sonstiges'], data['leer'], update.effective_message.date.astimezone(tz).strftime('%d.%m.%Y')]
+    # leergut_table.append_row(table_entry)
+
+
 def main() -> None:
     """
     Starts the bot and adds handlers to it.
@@ -101,8 +136,8 @@ def main() -> None:
     # application.add_handler(CommandHandler("input", new_input))
     # application.add_handler(CommandHandler("list", show_list))
     # application.add_handler(CommandHandler("prognose", show_forecast))
-    # application.add_handler(MessageHandler(
-    #     filters.StatusUpdate.WEB_APP_DATA, web_app_data))
+    application.add_handler(MessageHandler(
+        filters.StatusUpdate.WEB_APP_DATA, web_app_data))
     application.add_handler(MessageHandler(filters.TEXT, handle_message))
 
     application.run_polling(allowed_updates=Update.ALL_TYPES)

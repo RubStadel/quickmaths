@@ -3,7 +3,7 @@ body {
     margin: 0px;
     display: flex;
     justify-content: center;
-    background-color: var(--tg-theme-bg-color);
+    background: white;
     font-family: 'Nunito', sans-serif;
     overflow: hidden;
 }
