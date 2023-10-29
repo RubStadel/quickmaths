@@ -40,13 +40,19 @@ A Telegram bot through which a numbers game (credits to [Answer In Progress](htt
 * [x] create resultsOverlay
 * ~~[ ] add smooth scrolling to resultsOverlay (smaller steps)~~
 * [x] change symbols for resultsOverlay to include unicode characters instead of '*' and '/'
-* ~~[ ] add 'play again' button to resultsOverlay?~~
+* [x] add 'play again' button to resultsOverlay
+* [x] test sending data of multiple games at once
 
 ### Server
 
 * [x] set up bot in Telegram (name, token, description, abouttext)
-* [ ] update bot settings in Telegram (BotFather)
-* [ ] design menu button layout (also include game mode selection)
+* [x] update bot settings in Telegram (BotFather)
+* [ ] further update bot settings in Telegram (BotFather) (commands)
+* [x] design menu button layout (also include game mode selection)
+* [ ] visualize button menu tree
 * [ ] set up google spreadsheet
+* [x] choose how to calculate a total score (including time and number of errors)
+* [x] implement score calculation
 * [ ] enable saving of data to spreadsheet
-* [ ] write logic to find and display leaderboards (~~global or ~~personal)
+* [ ] write logic to find and display leaderboards
+* [ ] comment and annotate code

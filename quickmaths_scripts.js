@@ -4,7 +4,10 @@
 
 Telegram.WebApp.ready();
 Telegram.WebApp.expand();
-Telegram.WebApp.MainButton.setText('finish').onClick(sendResults);
+Telegram.WebApp.MainButton.setText('finish').onClick(function () {
+    data = JSON.stringify(data);
+    Telegram.WebApp.sendData(data);
+});
 
 let operators = [
     ['+', '+'],
@@ -14,7 +17,11 @@ let operators = [
 ];
 
 let results = [
-    {correctAnswers: 0, questionsNeeded: 20},
+    {correctAnswers: 0, questionsNeeded: 20}
+];
+
+let data = [
+    {questionsNeeded: results[0].questionsNeeded}
 ];
 
 let timer;
@@ -137,14 +144,25 @@ function hideHowToPlay() {
     btn.onclick = showHowToPlay;
 }
 
-/// function to start the game
+/// functions to (re)start the game
 
 function startGame() {
     document.getElementById("landingNav").style.height = "0%";
-
     document.getElementById("questionCount").innerHTML = `0/${results[0].questionsNeeded}`;
 
     startTimer();
+}
+
+function restartGame() {
+    results = [
+        {correctAnswers: 0, questionsNeeded: results[0].questionsNeeded},
+    ];
+
+    document.getElementById("scoreNav").style.height = "0%";
+    document.getElementById("questionCount").innerHTML = `0/${results[0].questionsNeeded}`;
+
+    startTimer();
+    Telegram.WebApp.MainButton.hide();
 }
 
 /// function to stop the game
@@ -156,21 +174,12 @@ function stopGame() {
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
 
+    data.push({seconds: (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML), questions: (results.length)});
+
     textField.innerHTML = `score: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].questionsNeeded}/${(results.length)}`;
     document.getElementById("scoreNav").style.height = "100%";
 
     Telegram.WebApp.MainButton.show();
-}
-
-function sendResults() {
-    let secondsTimer = document.getElementById("secondsTimer");
-    let minutesTimer = document.getElementById("minutesTimer");
-
-    const data = JSON.stringify({
-        minutes: +minutesTimer.innerHTML, seconds: +secondsTimer.innerHTML, questions: (results.length - 1), questionsNeeded: results[0].questionsNeeded
-    });
-
-    Telegram.WebApp.sendData(data);
 }
 
 /// functions to show and hide the results of all questions with answers
@@ -184,8 +193,6 @@ function showResults() {
     closebtn.style.display = "block";
     
     let questionResult;
-    console.log(results);
-    console.log(results.length);
     for(let i = 1; i < results.length; i++) {
         if (results[i].answeredCorrectly == false) {
             questionResult = 
