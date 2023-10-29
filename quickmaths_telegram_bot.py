@@ -20,13 +20,6 @@ if __version_info__ < (20, 0, 0, "alpha", 1):
 from telegram import KeyboardButton, ReplyKeyboardMarkup, Update, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
 
-# open google spreadsheet
-# gc = gspread.service_account(filename='fsr-vii-getraenke-59c02f0093d2.json')
-# sh = gc.open("FSR_VII_Getränke")
-
-# load specific worksheet
-# bestand_table:list[list] = sh.worksheet('bestand')
-
 # Enable logging
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -35,6 +28,14 @@ logging.basicConfig(
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
+
+# open google spreadsheet
+gc = gspread.service_account(filename='quickmaths-403521-d3c85ab8b3a4.json')
+sh = gc.open("quickmaths")
+
+# load specific worksheets
+classic_absolute_table:list[list] = sh.worksheet('classic, absolute')
+classic_relative_table:list[list] = sh.worksheet('classic, relative')
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
@@ -123,7 +124,7 @@ async def game_mode_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         [KeyboardButton(
             text="Classic",
             web_app=WebAppInfo(
-                url="https://getraenke.w3spaces.com/quickmaths/")
+                url="https://quickmaths.w3spaces.com/classic/")
         )],
     ]
 
@@ -175,10 +176,20 @@ async def menu_select(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             await show_relative_leaderboard("Classic", update, context)
 
 
-async def show_absolute_leaderboard(game_mode, update, context):                                                                            # temp !!
+async def show_absolute_leaderboard(game_mode:str, update, context):
     query = update.callback_query
     
-    await query.edit_message_text(text=f"This function has not been implemented yet.")
+    if game_mode == "Classic":
+        top_ten:list[list] = classic_absolute_table.get_values('A2:D11')
+        text = ""
+        for row in range(1):                                                                                                                # changed for testing only !
+            text += f"<b>{row + 1}. Place:</b>\n"
+            text += f"{top_ten[row][0]}: {round(float(top_ten[row][1]), 3)} points\n"
+            text += f"{top_ten[row][2]} seconds, {int(top_ten[row][3]) - 20} errors"
+            if row != 10:
+                text += f"\n"
+                
+        await query.edit_message_text(text=text, parse_mode="HTML")
 
 
 async def show_relative_leaderboard(game_mode, update, context):                                                                            # temp !!
@@ -187,7 +198,7 @@ async def show_relative_leaderboard(game_mode, update, context):                
     await query.edit_message_text(text=f"This function has not been implemented yet.")
 
 
-async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                                         # temp !! needs to save multiple games' stats
+async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                                         # temp !! update message
     """
     Prints and saves the data received from the web app.
     """
@@ -204,29 +215,45 @@ async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     # print(f'data[1]: {data[1]}')
     # print(f"data[1]['seconds']: {data[1]['seconds']}")
 
+    username = update.effective_user.username if (update.effective_user.username) else update.effective_user.first_name
+
     scores = []
     highest_score = 0
     highest_score_index = 0
     for i in range(1,len(data)):
         score = ((100*math.exp(-(data[i]['seconds']-30)/90))*(1-math.sqrt(1-(data[0]['questionsNeeded']/data[i]['questions']))))
         scores.append(score)
+        
         if score > highest_score:
             highest_score = round(score, 2)
             highest_score_index = i
 
+        table_entry = [username, score, data[i]['seconds'], data[i]['questions']]
+        classic_absolute_table.append_row(table_entry)
+        classic_absolute_table.sort((2, 'des'))
+
+        user_cell = classic_relative_table.find(username, in_column=1)
+        if user_cell:
+            user_data = classic_relative_table.row_values(user_cell.row)
+            avg_old = user_data[1]
+            number_games_old = user_data[2]
+
+            avg_new = ((avg_old * number_games_old) + score) / (number_games_old + 1)
+            classic_relative_table.update_cell(user_cell.row, 2, avg_new)
+            classic_relative_table.update_cell(user_cell.row, 3, (number_games_old + 1))
+            classic_relative_table.sort((2, 'des'))
+        else:
+            classic_relative_table.append_row([username, score, 1])
+
     # Daten an den Benutzer des Bots senden
     text:str = f"Congratulations, "
-    text = (text + f"{update.effective_user.username}.\n") if (update.effective_user.username) else (text + f"{update.effective_user.first_name}.\n")
+    text = (text + f"{username}.\n")
     text += f"Out of the {len(data) - 1} games you just played, your best result were {highest_score} points for correctly answering "
     text += f"{data[0]['questionsNeeded']}/{data[highest_score_index]['questions']} in only {data[highest_score_index]['seconds']} seconds!\n"
     
     await update.message.reply_html(
         text=text,
     )
-
-    # # neue Zeile mit den Daten in Google Tabelle einfügen
-    # table_entry = [data['mate_spezi'], data['fritz'], data['bier'], data['wasser'], data['sonstiges'], data['leer'], update.effective_message.date.astimezone(tz).strftime('%d.%m.%Y')]
-    # leergut_table.append_row(table_entry)
 
 
 def main() -> None:

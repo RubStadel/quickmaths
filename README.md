@@ -1,6 +1,6 @@
 # quickmaths
 
-A Telegram bot through which a numbers game (credits to [Answer In Progress](https://www.youtube.com/@answerinprogress "AIP on YouTube")) can be played in a WebApp.
+A Telegram bot through which a number of mental arithmetics games (inspired by [Answer In Progress'](https://www.youtube.com/@answerinprogress "AIP on YouTube") [quick maths game](https://www.youtube.com/watch?v=xvOkXXprG2g "why do people hate math")) can be played in a mobile-optimized WebApp.
 
 ---
 
@@ -49,10 +49,11 @@ A Telegram bot through which a numbers game (credits to [Answer In Progress](htt
 * [x] update bot settings in Telegram (BotFather)
 * [ ] further update bot settings in Telegram (BotFather) (commands)
 * [x] design menu button layout (also include game mode selection)
-* [ ] visualize button menu tree
-* [ ] set up google spreadsheet
+* [ ] visualize button menu tree?
+* [x] set up google spreadsheet
 * [x] choose how to calculate a total score (including time and number of errors)
 * [x] implement score calculation
-* [ ] enable saving of data to spreadsheet
+* [x] decide on how to structure the leaderboards (two for each game mode [absolute: score, time and number of errors?; relative: average score, games played])
+* [x] enable saving of data to spreadsheet
 * [ ] write logic to find and display leaderboards
 * [ ] comment and annotate code
