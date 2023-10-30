@@ -10,18 +10,19 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
 
 * [x] design concept and game structure
 * [x] come up with new game modes:
-  * higher numbers (e.g. up to 50)
-  * more questions (e.g. 50) or endless questions
-  * other operators (e.g. modulo '%')
-  * power tables (e.g. numbers squared; two to the power of x)
-  * years (e.g. 2023 - 67)
+  * same keyboard/principle:
+    * [ ] higher numbers (e.g. up to 50)
+    * [ ] more questions (e.g. 50) or endless questions
+    * [ ] other operators (e.g. modulo '%')
+    * [ ] power tables (e.g. numbers squared; two to the power of x)
+    * [ ] years (e.g. 2023 - 67)
   * (completely) different keyboard:
-    * higher ('>'), lower ('<') and equal ('=') [including questions with weird fractions, sqrt(), sin(), powers and similar stuff]
-    * higher ('>'), lower ('<') and equal ('=') [one value in dBm and one in W]
-    * '0' and '1' [binary logic]
-    * '0' and '1' [converting decimal numbers to binary]
-    * comma (',', decimal separator) instead of '-' [questions with rational fractions as answers]
-    * time values (four digits, ':' in answer is either permanent or instead of '-') [starting time + time delta e.g. 14:23 + 00:46]
+    * [ ] higher ('>'), lower ('<') and equal ('=') [including questions with weird fractions, sqrt(), sin(), powers and similar stuff]
+    * [ ] higher ('>'), lower ('<') and equal ('=') [one value in dBm and one in W]
+    * [ ] '0' and '1' [binary logic]
+    * [ ] '0' and '1' [converting decimal numbers to binary]
+    * [ ] comma (',', decimal separator) instead of '-' [questions with rational fractions as answers]
+    * [ ] time values (four digits, ':' in answer is either permanent or instead of '-') [starting time + time delta e.g. 14:23 + 00:46]
 
 ### WebApp
 
@@ -55,5 +56,5 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
 * [x] implement score calculation
 * [x] decide on how to structure the leaderboards (two for each game mode [absolute: score, time and number of errors?; relative: average score, games played])
 * [x] enable saving of data to spreadsheet
-* [ ] write logic to find and display leaderboards
+* [x] write logic to find and display leaderboards
 * [ ] comment and annotate code

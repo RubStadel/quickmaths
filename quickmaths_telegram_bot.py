@@ -37,6 +37,23 @@ sh = gc.open("quickmaths")
 classic_absolute_table:list[list] = sh.worksheet('classic, absolute')
 classic_relative_table:list[list] = sh.worksheet('classic, relative')
 
+game_mode_constants:dict{dict} = {                                                                                                          # temp ! add new game modes
+    "Classic": {
+        "questions_needed": 20,
+        "absolute_table": classic_absolute_table,
+        "relative_table": classic_relative_table
+    },
+}
+
+def conditional_round(x:float) -> int|float:
+    if (x >= 10.0):
+        return int(round(x, 0))
+    elif (x >= 1.0):
+        return round(x, 1)
+    elif (x < 1.0):
+        return round(x, 2)
+
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
     Defines a `/start` command handler.
@@ -85,7 +102,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         await update.message.reply_html(text=f"Command not understood.")
 
 
-async def leaderboard_type_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                              # temp !!!
+async def leaderboard_type_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
 
     keyboard = [
@@ -103,7 +120,7 @@ async def leaderboard_type_menu(update: Update, context: ContextTypes.DEFAULT_TY
     await query.edit_message_text("Choose a leaderboard type:", reply_markup=reply_markup)
     
 
-async def leaderboard_mode_menu(type:str, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                    # temp !!!
+async def leaderboard_mode_menu(type:str, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                      # temp ! add new game modes
     query = update.callback_query
     
     keyboard = [
@@ -117,7 +134,7 @@ async def leaderboard_mode_menu(type:str, update: Update, context: ContextTypes.
     await query.edit_message_text("Choose a game mode:", reply_markup=reply_markup)
 
 
-async def game_mode_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def game_mode_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                                       # temp ! add new game modes
     query = update.callback_query
     
     keyboard = [
@@ -167,35 +184,47 @@ async def menu_select(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     elif query.data == 'relative':
         await leaderboard_mode_menu("relative", update, context)
 
-    elif "absolute" in query.data:
+    elif "absolute" in query.data:                                                                                                          # temp ! add new game modes
         if "Classic" in query.data:
             await show_absolute_leaderboard("Classic", update, context)
 
-    elif "relative" in query.data:
+    elif "relative" in query.data:                                                                                                          # temp ! add new game modes
         if "Classic" in query.data:
             await show_relative_leaderboard("Classic", update, context)
 
 
-async def show_absolute_leaderboard(game_mode:str, update, context):
+async def show_absolute_leaderboard(game_mode:str, update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
+    text = ""
     
-    if game_mode == "Classic":
-        top_ten:list[list] = classic_absolute_table.get_values('A2:D11')
-        text = ""
-        for row in range(1):                                                                                                                # changed for testing only !
-            text += f"<b>{row + 1}. Place:</b>\n"
-            text += f"{top_ten[row][0]}: {round(float(top_ten[row][1]), 3)} points\n"
-            text += f"{top_ten[row][2]} seconds, {int(top_ten[row][3]) - 20} errors"
-            if row != 10:
-                text += f"\n"
+    top_ten:list[list] = game_mode_constants[game_mode]['absolute_table'].get_values('A2:D11')
+
+    for row in range((10 if (len(top_ten) > 10) else len(top_ten))):
+        text += f"<b>{row + 1}. Place:</b>\n"
+        text += f"{top_ten[row][0]}: {round(float(top_ten[row][1]), 3)} points\n"
+        text += f"{top_ten[row][2]} seconds, {int(top_ten[row][3]) - game_mode_constants[game_mode]['questions_needed']} errors"
+        if row != 10:
+            text += f"\n"
                 
-        await query.edit_message_text(text=text, parse_mode="HTML")
+    await query.edit_message_text(text=text, parse_mode="HTML")
 
 
-async def show_relative_leaderboard(game_mode, update, context):                                                                            # temp !!
+async def show_relative_leaderboard(game_mode:str, update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
-    
-    await query.edit_message_text(text=f"This function has not been implemented yet.")
+    username = update.effective_user.username if (update.effective_user.username) else update.effective_user.first_name
+    text = ""
+    table = game_mode_constants[game_mode]['absolute_table']
+
+    user_cell = table.find(username, in_column=1)
+    if user_cell:
+        percentile = conditional_round(((user_cell.row - 1) / (table.row_count - 1)) * 100)
+        user_data = table.row_values(user_cell.row)
+        text += f"With an average score of {round(float(user_data[1]), 3)} points\n"
+        text += f"you are in the top {percentile}% of all {table.row_count - 1} players."
+    else:
+        text += f"You have not played this game mode yet."
+
+    await query.edit_message_text(text=text, parse_mode="HTML")
 
 
 async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                                         # temp !! update message
@@ -209,11 +238,6 @@ async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
     # Daten laden, die die WebApp gesendet hat
     data:dict = json.loads(update.effective_message.web_app_data.data)
-    # print(f'data: {data}')
-    # print(f'len(data): {len(data)}')
-    # print(f"data[0]['questionsNeeded']: {data[0]['questionsNeeded']}")
-    # print(f'data[1]: {data[1]}')
-    # print(f"data[1]['seconds']: {data[1]['seconds']}")
 
     username = update.effective_user.username if (update.effective_user.username) else update.effective_user.first_name
 
@@ -248,7 +272,7 @@ async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     # Daten an den Benutzer des Bots senden
     text:str = f"Congratulations, "
     text = (text + f"{username}.\n")
-    text += f"Out of the {len(data) - 1} games you just played, your best result were {highest_score} points for correctly answering "
+    text += f"Out of the {len(data) - 1} game(s) you just played, your best result were {highest_score} points for correctly answering "
     text += f"{data[0]['questionsNeeded']}/{data[highest_score_index]['questions']} in only {data[highest_score_index]['seconds']} seconds!\n"
     
     await update.message.reply_html(
