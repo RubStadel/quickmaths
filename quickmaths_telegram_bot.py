@@ -117,7 +117,10 @@ async def leaderboard_type_menu(update: Update, context: ContextTypes.DEFAULT_TY
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await query.edit_message_text("Choose a leaderboard type:", reply_markup=reply_markup)
+    if query:
+        await query.edit_message_text("Choose a leaderboard type:", reply_markup=reply_markup)
+    else: 
+        await update.message.reply_text("Choose a leaderboard type:", reply_markup=reply_markup)
     
 
 async def leaderboard_mode_menu(type:str, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -128,7 +131,10 @@ async def leaderboard_mode_menu(type:str, update: Update, context: ContextTypes.
         keyboard.append([InlineKeyboardButton(text=mode, callback_data=mode + ", " + type)])
 
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await query.edit_message_text("Choose a game mode:", reply_markup=reply_markup)
+    if query:
+        await query.edit_message_text("Choose a game mode:", reply_markup=reply_markup)
+    else:
+        await update.message.reply_text("Choose a game mode:", reply_markup=reply_markup)
 
 
 async def game_mode_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -146,7 +152,11 @@ async def game_mode_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     )
 
     # send a message to the user to explain how the bot works
-    await query.message.reply_text("Choose a game mode:", reply_markup=reply_markup)
+    if query:
+        await query.edit_message_text("Choose a game mode", reply_markup=InlineKeyboardMarkup([]))
+        await query.message.reply_text("using the keyboard buttons:", reply_markup=reply_markup)
+    else:
+        await update.message.reply_html("Choose a game mode:", reply_markup=reply_markup)
 
 
 async def menu_select(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -196,8 +206,8 @@ async def show_absolute_leaderboard(game_mode:str, update: Update, context: Cont
 
     for row in range((10 if (len(top_ten) > 10) else len(top_ten))):
         text += f"<b>{row + 1}. Place:</b>\n"
-        text += f"{top_ten[row][0]}: {round(float(top_ten[row][1]), 3)} points\n"
-        text += f"{top_ten[row][2]} seconds, {int(top_ten[row][3]) - game_mode_constants[game_mode]['questions_needed']} errors"
+        text += f"    {top_ten[row][0]}: {round(float(top_ten[row][1]), 3)} points\n"
+        text += f"    {top_ten[row][2]} seconds, {int(top_ten[row][3]) - game_mode_constants[game_mode]['questions_needed']} errors"
         if row != 10:
             text += f"\n"
                 
@@ -208,7 +218,7 @@ async def show_relative_leaderboard(game_mode:str, update: Update, context: Cont
     query = update.callback_query
     username = update.effective_user.username if (update.effective_user.username) else update.effective_user.first_name
     text = f"<u>your performance in <em>{game_mode}</em></u>\n"
-    table = game_mode_constants[game_mode]['absolute_table']
+    table = game_mode_constants[game_mode]['relative_table']
 
     user_cell = table.find(username, in_column=1)
     if user_cell:
@@ -222,7 +232,7 @@ async def show_relative_leaderboard(game_mode:str, update: Update, context: Cont
     await query.edit_message_text(text=text, parse_mode="HTML")
 
 
-async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                                         # temp !! update message
+async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                                         # temp !! update message, change score calculation for different game modes
     """
     Prints and saves the data received from the web app.
     """
@@ -254,8 +264,8 @@ async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         user_cell = classic_relative_table.find(username, in_column=1)
         if user_cell:
             user_data = classic_relative_table.row_values(user_cell.row)
-            avg_old = user_data[1]
-            number_games_old = user_data[2]
+            avg_old = float(user_data[1])
+            number_games_old = int(user_data[2])
 
             avg_new = ((avg_old * number_games_old) + score) / (number_games_old + 1)
             classic_relative_table.update_cell(user_cell.row, 2, avg_new)

@@ -58,6 +58,7 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
 * [x] set up google spreadsheet
 * [x] choose how to calculate a total score (including time and number of errors)
 * [x] implement score calculation
+* [ ] change score calculation to change for each game mode
 * [x] decide on how to structure the leaderboards (two for each game mode [absolute: score, time and number of errors?; relative: average score, games played])
 * [x] enable saving of data to spreadsheet
 * [x] write logic to find and display leaderboards
