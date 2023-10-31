@@ -127,7 +127,8 @@ function showHowToPlay() {
     textField.innerHTML = 
     "Correctly answer twenty maths questions.<br>\
     The questions are randomized and include numbers up to 20.<br>\
-    The top of the page shows a timer and a counter of correct answers.";
+    The score is based on your time and the amount of questions answered incorrectly.\
+    High scores of close to 100 can only be achieved without making mistakes, so don't skip hard questions!";
     btn.onclick = hideHowToPlay;
 }
 

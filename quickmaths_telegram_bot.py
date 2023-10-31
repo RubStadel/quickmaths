@@ -37,7 +37,7 @@ sh = gc.open("quickmaths")
 classic_absolute_table:list[list] = sh.worksheet('classic, absolute')
 classic_relative_table:list[list] = sh.worksheet('classic, relative')
 
-game_mode_constants:dict{dict} = {                                                                                                          # temp ! add new game modes
+game_mode_constants:dict[dict] = {                                                                                                          # add new game modes !
     "Classic": {
         "questions_needed": 20,
         "absolute_table": classic_absolute_table,
@@ -120,30 +120,23 @@ async def leaderboard_type_menu(update: Update, context: ContextTypes.DEFAULT_TY
     await query.edit_message_text("Choose a leaderboard type:", reply_markup=reply_markup)
     
 
-async def leaderboard_mode_menu(type:str, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                      # temp ! add new game modes
+async def leaderboard_mode_menu(type:str, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     
-    keyboard = [
-        [InlineKeyboardButton(
-            text="Classic",
-            callback_data="Classic, " + type,
-        )],
-    ]
+    keyboard = []
+    for mode in game_mode_constants:
+        keyboard.append([InlineKeyboardButton(text=mode, callback_data=mode + ", " + type)])
 
     reply_markup = InlineKeyboardMarkup(keyboard)
     await query.edit_message_text("Choose a game mode:", reply_markup=reply_markup)
 
 
-async def game_mode_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:                                                       # temp ! add new game modes
+async def game_mode_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     
-    keyboard = [
-        [KeyboardButton(
-            text="Classic",
-            web_app=WebAppInfo(
-                url="https://quickmaths.w3spaces.com/classic/")
-        )],
-    ]
+    keyboard = []
+    for mode in game_mode_constants:
+        keyboard.append([KeyboardButton(text=mode, web_app=WebAppInfo(url="https://quickmaths.w3spaces.com/" + mode.lower() + "/"))])
 
     reply_markup = ReplyKeyboardMarkup(
         keyboard, 
@@ -184,18 +177,20 @@ async def menu_select(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     elif query.data == 'relative':
         await leaderboard_mode_menu("relative", update, context)
 
-    elif "absolute" in query.data:                                                                                                          # temp ! add new game modes
-        if "Classic" in query.data:
-            await show_absolute_leaderboard("Classic", update, context)
+    elif "absolute" in query.data:
+        for mode in game_mode_constants:
+            if mode in query.data:
+                await show_absolute_leaderboard(mode, update, context)
 
-    elif "relative" in query.data:                                                                                                          # temp ! add new game modes
-        if "Classic" in query.data:
-            await show_relative_leaderboard("Classic", update, context)
+    elif "relative" in query.data:
+        for mode in game_mode_constants:
+            if mode in query.data:
+                await show_relative_leaderboard(mode, update, context)
 
 
 async def show_absolute_leaderboard(game_mode:str, update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
-    text = ""
+    text = f"<u>best performances in <em>{game_mode}</em></u>\n"
     
     top_ten:list[list] = game_mode_constants[game_mode]['absolute_table'].get_values('A2:D11')
 
@@ -212,7 +207,7 @@ async def show_absolute_leaderboard(game_mode:str, update: Update, context: Cont
 async def show_relative_leaderboard(game_mode:str, update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     username = update.effective_user.username if (update.effective_user.username) else update.effective_user.first_name
-    text = ""
+    text = f"<u>your performance in <em>{game_mode}</em></u>\n"
     table = game_mode_constants[game_mode]['absolute_table']
 
     user_cell = table.find(username, in_column=1)

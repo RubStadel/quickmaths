@@ -34,9 +34,10 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
 * [x] fix timer to show leading zeros
 * [x] create startOverlay
 * [x] write short explanation of the game
+* [x] add short explanation of the scoring system ~~formula~~
 * [x] decide on a way to display the explanation of the game
 * [x] implement startGame function
-* [x] **test sending data without closing the WebApp -> impossible**
+* [x] test sending data without closing the WebApp
 * [x] create scoreOverlay
 * [x] create resultsOverlay
 * ~~[ ] add smooth scrolling to resultsOverlay (smaller steps)~~
@@ -50,7 +51,9 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
 * [x] update bot settings in Telegram (BotFather)
 * [ ] further update bot settings in Telegram (BotFather) (commands)
 * [x] design menu button layout (also include game mode selection)
-* [ ] visualize button menu tree?
+* [x] change button menu to be dynamic (based on contents of game_mode_stats; avoid manually updating menu)
+* [ ] visualize button menu tree? (for GitHub repo)
+* [x] add headers to leaderboards (so it stays visible which game mode was selected)
 * [x] set up google spreadsheet
 * [x] choose how to calculate a total score (including time and number of errors)
 * [x] implement score calculation
