@@ -44,6 +44,7 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
 * [x] change symbols for resultsOverlay to include unicode characters instead of '*' and '/'
 * [x] add 'play again' button to resultsOverlay
 * [x] test sending data of multiple games at once
+* [x] rename files to reflect the game mode they are associated with
 
 ### Server
 
