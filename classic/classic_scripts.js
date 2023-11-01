@@ -100,9 +100,14 @@ function checkAnswer() {
             stopGame();
         }
     }
+
     results.push({question: currentQuestion, actualAnswer: currentAnswer, givenAnswer: answer.innerHTML, answeredCorrectly: answerIsCorrect});
     clearAnswer();
     generateNewQuestion();
+
+    if(!results[0].questionsNeeded) {
+        document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers} (${results.length - 1 - results[0].correctAnswers})`;
+    }
 }
 
 /// functions concerning the game's (pseudo) timer
@@ -151,6 +156,9 @@ function showHowToPlay() {
     The score is based on your time and the amount of questions answered incorrectly.\
     High scores of close to 100 can only be achieved without making mistakes, so don't skip hard questions!";
     btn.onclick = hideHowToPlay;
+
+    document.getElementById("practiceButton").style.display = "none";
+    document.getElementById("startButton").style.marginTop = "9.2vh";
 }
 
 function hideHowToPlay() {
@@ -164,6 +172,9 @@ function hideHowToPlay() {
     <a id='linkAIPVideo' href='https://youtu.be/xvOkXXprG2g?si=WWNTwtRDeu39E_JY' target='_blank' rel='noopener noreferrer' title='why do people hate math' style='color: #f20d0d'>\
         <ion-icon name='logo-youtube'></ion-icon></a>";
     btn.onclick = showHowToPlay;
+
+    document.getElementById("practiceButton").style.display = "initial";
+    document.getElementById("startButton").style.marginTop = "5.5vh";
 }
 
 /// functions to (re)start the game
@@ -183,6 +194,10 @@ function restartGame() {
     document.getElementById("scoreNav").style.height = "0%";
     document.getElementById("questionCount").innerHTML = `0/${results[0].questionsNeeded}`;
 
+    if(!results[0].questionsNeeded) {
+        document.getElementById("questionCount").innerHTML = `0 (0)`;
+    }
+
     startTimer();
     Telegram.WebApp.MainButton.hide();
 }
@@ -198,7 +213,7 @@ function stopGame() {
 
     data.push({seconds: (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML), questions: (results.length)});
 
-    textField.innerHTML = `score: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].questionsNeeded}/${(results.length)}`;
+    textField.innerHTML = `time: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].questionsNeeded}/${(results.length)}`;
     document.getElementById("scoreNav").style.height = "100%";
 
     Telegram.WebApp.MainButton.show();
@@ -237,4 +252,34 @@ function hideResults() {
     textField.innerHTML = "";
     let closebtn = document.getElementById("resultsCloseButton");
     closebtn.style.display = "none";
+}
+
+// functions handling the (endless) practice mode
+
+function startPracticeGame() {
+    document.getElementById("secondsTimer").style.display = "none";
+    document.getElementById("minutesTimer").style.display = "none";
+    document.getElementById("stopPracticeButton").style.display = "block";
+    document.getElementById("topRow").style.color = "white";
+    document.getElementById("questionCount").innerHTML = "0 (0)"
+    document.getElementById("questionCount").style.fontSize = "4vh";
+
+    document.getElementById("landingNav").style.height = "0%";
+    results[0].questionsNeeded = 0;
+    startTimer();
+}
+
+function stopPracticeGame() {
+    clearInterval(timer);
+
+    let textField = document.getElementById("scoreTextField");
+    let secondsTimer = document.getElementById("secondsTimer");
+    let minutesTimer = document.getElementById("minutesTimer");
+
+    // data.push({seconds: (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML), questions: (results.length)});
+
+    textField.innerHTML = `time: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].correctAnswers}/${(results.length)}`;
+    document.getElementById("scoreNav").style.height = "100%";
+
+    Telegram.WebApp.MainButton.onClick(() => {Telegram.WebApp.close();}).show();
 }

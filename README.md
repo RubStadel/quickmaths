@@ -12,7 +12,8 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
 * [x] come up with new game modes:
   * same keyboard/principle:
     * [ ] big_numbers: higher numbers (e.g. up to 50)
-    * [ ] classic_long: more questions (e.g. 50) or endless questions
+    * [ ] classic_long: more questions (e.g. 50)
+    * [x] endless: practice runs without scores (no results saved)
     * [x] advanced: other operators (e.g. modulo '%', numbers squared)
     * [ ] power tables (e.g. two to the power of x)
     * [ ] years (e.g. 2023 - 67)

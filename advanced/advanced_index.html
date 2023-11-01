@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>quickmaths modulo</title>
+    <title>quickmaths advanced</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script lang="javascript" src="advanced_scripts.js"></script>
 	<link rel="stylesheet" href="advanced_styles.css"/>
@@ -21,6 +21,7 @@
             <div id="questionCount">0/20</div>
             <div id="minutesTimer">00</div>:
             <div id="secondsTimer">00</div>
+			<button class="invertedButtonColors" id="stopPracticeButton" onclick="stopPracticeGame();">stop</button>
         </div>
         <div class="row" id="mainRow">
             <div id="questionOperand1">12 </div>
@@ -58,7 +59,7 @@
 		<div class="overlay-content">
             <p>quickmaths <em>advanced</em></p>
             <br>
-			<button id="howToPlayButton" onclick="showHowToPlay();">how to play</button><br><br>
+			<button class="invertedButtonColors" id="howToPlayButton" onclick="showHowToPlay();">how to play</button><br><br>
             <div id="landingTextField">
                 Inspired by the mental arithmetics game originally created by 
                 <a href="https://www.youtube.com/@answerinprogress" target="_blank" rel="noopener noreferrer" title="AIP on YouTube">
@@ -69,7 +70,8 @@
                     <ion-icon name="logo-youtube"></ion-icon>
 			    </a>
             </div>
-            <br><br>
+            <button id="practiceButton" onclick="startPracticeGame();">practice mode</button>
+            <br>
 			<button id="startButton" onclick="startGame();">start</button>
 		</div>
 	</div>

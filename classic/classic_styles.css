@@ -52,13 +52,13 @@ body {
     transition: 0.4s;
 }
 
-#howToPlayButton {
+.invertedButtonColors {
     background-color: transparent;
     color: black;
     border: 2px solid black;
 }
 
-#howToPlayButton:hover {
+.invertedButtonColors:hover {
     color: white;
     background-color: black;
 }
@@ -70,11 +70,17 @@ body {
     font-size: 3vh;
 }
 
+#practiceButton {
+    height: 8vh;
+    width: 65vw;
+    border-radius: 1.5rem;
+}
+
 #startButton {
     height: 10vh;
     width: 75vw;
     border-radius: 2rem;
-    margin-top: 3.5vh;
+    margin-top: 5.5vh;
 }
 
 #scoreTextField {
@@ -155,11 +161,13 @@ button:hover {
     top: 1.5vh;
 }
 
-#timer {
-    font-size: 5vh;
-    padding: 0 0.75rem;
-    border: 2px solid black;
-    border-radius: 0.5rem;
+#stopPracticeButton {
+    position: absolute;
+    top: 2vh;
+    right: 5vw;
+    display: none;
+    border-radius: 3rem;
+    padding: 0.5vh 5vw;
 }
 
 #mainRow {
