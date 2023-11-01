@@ -27,7 +27,11 @@ let data = [
 ];
 
 let timer;
-let timerSkipSeconds = 0;
+let timerSkipSeconds = {
+    total: 0,
+    current: 0
+};
+let timeDelta = 0;
 
 /// functions concerning the answer to the maths question
 
@@ -94,13 +98,6 @@ function checkAnswer() {
     let currentQuestion = operand1.innerHTML + tmpOperator + operand2_number;
     let currentAnswer = eval(currentQuestion);
 
-    if(currentAnswer > 100) {
-        if(currentQuestion.length == 8 || tmpOperator == "**") {
-            timerSkipSeconds += 4;
-        }
-        timerSkipSeconds += 2;
-    }
-
     currentQuestion = operand1.innerHTML + tmp.concat(" ") + operand2.innerHTML.slice(0, -1);
     let answerIsCorrect = (answer.innerHTML == currentAnswer && answer.innerHTML != "");
 
@@ -110,9 +107,20 @@ function checkAnswer() {
         if(results[0].correctAnswers == results[0].questionsNeeded) {
             stopGame();
         }
+
+        if(currentAnswer > 100) {
+            if(currentQuestion.length == 8 || tmpOperator == "**") {
+                timerSkipSeconds += 4;
+            }
+            timerSkipSeconds += 2;
+        }
     }
 
-    results.push({question: currentQuestion, actualAnswer: currentAnswer, givenAnswer: answer.innerHTML, answeredCorrectly: answerIsCorrect});
+    let secondsTimer = document.getElementById("secondsTimer");
+    let currentTime = +secondsTimer.innerHTML + timerSkipSeconds.current - timeDelta;
+    timeDelta = +secondsTimer.innerHTML + timerSkipSeconds.current;
+
+    results.push({question: currentQuestion, actualAnswer: currentAnswer, givenAnswer: answer.innerHTML, answeredCorrectly: answerIsCorrect, time: currentTime});
     clearAnswer();
     generateNewQuestion();
 
@@ -130,8 +138,8 @@ function updateTimer() {
     secondsTimer.style.color = "black";
     minutesTimer.style.color = "black";
 
-    if(timerSkipSeconds) {
-        timerSkipSeconds--;
+    if(timerSkipSeconds.total - timerSkipSeconds.current) {
+        timerSkipSeconds.current++;
         secondsTimer.style.color = "gold";
         minutesTimer.style.color = "gold";
         return
@@ -222,7 +230,7 @@ function stopGame() {
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
 
-    data.push({seconds: (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML), questions: (results.length)});
+    data.push({seconds: (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML - (timerSkipSeconds.total - timerSkipSeconds.current)), questions: (results.length)});
 
     textField.innerHTML = `score: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].questionsNeeded}/${(results.length)}`;
     document.getElementById("scoreNav").style.height = "100%";
@@ -246,11 +254,13 @@ function showResults() {
             questionResult = 
             `<span style='color: darkred;'><big><b>Question ${i}</b></big><br>\
             ${results[i].question} &ne; ${results[i].givenAnswer}<br>\
-            correct answer: ${results[i].actualAnswer}</span><br>`;
+            correct answer: ${results[i].actualAnswer}<br>\
+            <small>${results[i].time} second(s)</small></span><br>`;
         } else {
             questionResult = 
             `<span><big><b>Question ${i}</b></big><br>\
-            ${results[i].question} &#x003D; ${results[i].givenAnswer}</span><br>`;
+            ${results[i].question} &#x003D; ${results[i].givenAnswer}<br>\
+            <small>${results[i].time} second(s)</small></span><br>`;
         }
         textField.innerHTML = textField.innerHTML.concat(questionResult);
     }
