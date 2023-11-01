@@ -33,25 +33,34 @@ logger = logging.getLogger(__name__)
 gc = gspread.service_account(filename='quickmaths-403521-d3c85ab8b3a4.json')
 sh = gc.open("quickmaths")
 
-# load specific worksheets
-classic_absolute_table:list[list] = sh.worksheet('classic, absolute')
-classic_relative_table:list[list] = sh.worksheet('classic, relative')
-
 game_mode_constants:dict[dict] = {                                                                                                          # add new game modes !
-    "Classic": {
+    "classic": {
         "questions_needed": 20,
-        "absolute_table": classic_absolute_table,
-        "relative_table": classic_relative_table
+        "absolute_table": sh.worksheet('classic, absolute'),
+        "relative_table": sh.worksheet('classic, relative'),
+        "time_min": 30
+    },
+    "advanced": {
+        "questions_needed": 20,
+        "absolute_table": sh.worksheet('advanced, absolute'),
+        "relative_table": sh.worksheet('advanced, relative'),
+        "time_min": 40
     },
 }
 
-def conditional_round(x:float) -> int|float:
+def conditional_round(x:float) -> float:
     if (x >= 10.0):
         return int(round(x, 0))
     elif (x >= 1.0):
         return round(x, 1)
     elif (x < 1.0):
         return round(x, 2)
+
+
+def score_calculation(game_mode_info:dict, game_results:dict) -> float:
+    time_min = game_mode_constants[game_mode_info['gameMode']]['time_min']
+
+    return ((100 * math.exp(-((game_results['seconds'] - time_min) / 90) * (30 / time_min))) * (1 - math.sqrt(1 - (game_mode_info['questionsNeeded'] / game_results['questions']))))
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -142,7 +151,7 @@ async def game_mode_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     
     keyboard = []
     for mode in game_mode_constants:
-        keyboard.append([KeyboardButton(text=mode, web_app=WebAppInfo(url="https://quickmaths.w3spaces.com/" + mode.lower() + "/"))])
+        keyboard.append([KeyboardButton(text=mode, web_app=WebAppInfo(url="https://quickmaths.w3spaces.com/" + mode + "/"))])
 
     reply_markup = ReplyKeyboardMarkup(
         keyboard, 
@@ -200,7 +209,7 @@ async def menu_select(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
 async def show_absolute_leaderboard(game_mode:str, update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
-    text = f"<u>best performances in <em>{game_mode}</em></u>\n"
+    text = f"<u>best performances in quickmaths <em>{game_mode}</em></u>\n"
     
     top_ten:list[list] = game_mode_constants[game_mode]['absolute_table'].get_values('A2:D11')
 
@@ -217,7 +226,7 @@ async def show_absolute_leaderboard(game_mode:str, update: Update, context: Cont
 async def show_relative_leaderboard(game_mode:str, update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     username = update.effective_user.username if (update.effective_user.username) else update.effective_user.first_name
-    text = f"<u>your performance in <em>{game_mode}</em></u>\n"
+    text = f"<u>your performance in quickmaths <em>{game_mode}</em></u>\n"
     table = game_mode_constants[game_mode]['relative_table']
 
     user_cell = table.find(username, in_column=1)
@@ -245,12 +254,13 @@ async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     data:dict = json.loads(update.effective_message.web_app_data.data)
 
     username = update.effective_user.username if (update.effective_user.username) else update.effective_user.first_name
+    game_mode = data[0]['gameMode']
 
     scores = []
     highest_score = 0
     highest_score_index = 0
     for i in range(1,len(data)):
-        score = ((100*math.exp(-(data[i]['seconds']-30)/90))*(1-math.sqrt(1-(data[0]['questionsNeeded']/data[i]['questions']))))
+        score = score_calculation(data[0], data[i])
         scores.append(score)
         
         if score > highest_score:
@@ -258,27 +268,29 @@ async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             highest_score_index = i
 
         table_entry = [username, score, data[i]['seconds'], data[i]['questions']]
-        classic_absolute_table.append_row(table_entry)
-        classic_absolute_table.sort((2, 'des'))
+        table = game_mode_constants[game_mode]['absolute_table']
+        table.append_row(table_entry)
+        table.sort((2, 'des'))
 
-        user_cell = classic_relative_table.find(username, in_column=1)
+        table = game_mode_constants[game_mode]['relative_table']
+        user_cell = table.find(username, in_column=1)
         if user_cell:
-            user_data = classic_relative_table.row_values(user_cell.row)
+            user_data = table.row_values(user_cell.row)
             avg_old = float(user_data[1])
             number_games_old = int(user_data[2])
 
             avg_new = ((avg_old * number_games_old) + score) / (number_games_old + 1)
-            classic_relative_table.update_cell(user_cell.row, 2, avg_new)
-            classic_relative_table.update_cell(user_cell.row, 3, (number_games_old + 1))
-            classic_relative_table.sort((2, 'des'))
+            table.update_cell(user_cell.row, 2, avg_new)
+            table.update_cell(user_cell.row, 3, (number_games_old + 1))
+            table.sort((2, 'des'))
         else:
-            classic_relative_table.append_row([username, score, 1])
+            table.append_row([username, score, 1])
 
     # Daten an den Benutzer des Bots senden
     text:str = f"Congratulations, "
     text = (text + f"{username}.\n")
-    text += f"Out of the {len(data) - 1} game(s) you just played, your best result were {highest_score} points for correctly answering "
-    text += f"{data[0]['questionsNeeded']}/{data[highest_score_index]['questions']} in only {data[highest_score_index]['seconds']} seconds!\n"
+    text += f"Out of the {len(data) - 1} game(s) of quickmaths <em>{game_mode}</em> you just played, your best result were {highest_score} points for correctly answering "
+    text += f"{data[0]['questionsNeeded']}/{data[highest_score_index]['questions']} in {data[highest_score_index]['seconds']} seconds!\n"
     
     await update.message.reply_html(
         text=text,

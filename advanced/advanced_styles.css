@@ -1,0 +1,198 @@
+body {
+    height: 100%;
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+}
+
+.overlay {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    background-color: white;
+    overflow: hidden;
+    transition: 0.25s ease-out;
+}
+
+.overlay-content {
+    position: relative;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 4vh;
+}
+
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 3vh;
+    color: black;
+    display: inline;
+    transition: 0.25s;
+}
+
+.overlay p {
+    font-size: 5vh;
+    font-weight: bolder;
+}
+
+.overlay .closebtn {
+    position: fixed;
+    top: -2vh;
+    right: 5vw;
+    font-size: 5rem;
+    color: #585858;
+    display: none;
+    transition: 0.4s;
+}
+
+#howToPlayButton {
+    background-color: transparent;
+    color: black;
+    border: 2px solid black;
+}
+
+#howToPlayButton:hover {
+    color: white;
+    background-color: black;
+}
+
+#landingTextField {
+    height: 35vh;
+    padding: 0 11vw;
+    text-align: justify;
+    font-size: 3vh;
+}
+
+#startButton {
+    height: 10vh;
+    width: 75vw;
+    border-radius: 2rem;
+    margin-top: 3.5vh;
+}
+
+#scoreTextField {
+    height: 35vh;
+    padding: 0 5vw;
+}
+
+#resultsTextField {
+    font-size: 3vh;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: normal;
+}
+
+#resultsTextField>span {
+    margin-top: 5vh;
+    line-height: 1.75;
+}
+
+div {
+    font-size: 6vh;
+    font-weight: 500;
+    color: black;
+}
+
+button {
+    border: none;
+    height: 7vh;
+    padding: 0.25rem 0.75rem;
+    margin: 0.25rem;
+    border-radius: 1rem;
+    outline: none;
+    color: white;
+    background: black;
+    font-size: 4.25vh;
+    /* disable selection */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+button:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+}
+
+#column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0; 
+    min-height: 11vh;
+    max-height: 11vh;
+}
+
+#topRow {
+    min-height: 11vh;
+    max-height: 11vh;
+}
+
+#questionCount {
+    font-size: 3vh;
+    position: absolute;
+    left: 4vw;
+    top: 1.5vh;
+}
+
+#timer {
+    font-size: 5vh;
+    padding: 0 0.75rem;
+    border: 2px solid black;
+    border-radius: 0.5rem;
+}
+
+#mainRow {
+    min-height: 30vh;
+    max-height: 30vh;
+}
+
+#mainRow>div {
+    font-size: 6.5vh;
+    margin-right: 4vw;
+}
+
+#submitRow {
+    min-height: 15vh;
+    max-height: 15vh;
+}
+
+#submitAnswerButton {
+    width: 90vw;
+    height: 85%;
+    margin-bottom: 2.5vh;
+}
+
+.numberButton {
+    width: 33vw;
+    height: 9vh;
+    color: black;
+    background: white;
+    font-size: 5vh;
+    margin: 0 3vw;
+}
+
+.numberButton:hover {
+    background-color: gainsboro;
+    border: none;
+}

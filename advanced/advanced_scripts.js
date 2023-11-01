@@ -13,6 +13,8 @@ let operators = [
     ['+', '+'],
     ['-', '-'],
     ['*', '\u22C5'],
+    ['**', '\u00B2'],
+    ['%', '%'],
     ['/', '\u00F7']
 ];
 
@@ -21,7 +23,7 @@ let results = [
 ];
 
 let data = [
-    {questionsNeeded: results[0].questionsNeeded}
+    {questionsNeeded: results[0].questionsNeeded, gameMode: 'advanced'}
 ];
 
 let timer;
@@ -50,9 +52,14 @@ function generateNewQuestion() {
     let random;
 
     if((operand1 % operand2 == 0) && (operand1 != 0)) {
-        random = Math.floor((Math.random() * 4));
+        random = Math.floor((Math.random() * 6));
+    } else if(operand1 >= operand2){
+        random = Math.floor((Math.random() * 5));
     } else {
-        random = Math.floor((Math.random() * 3));
+        random = Math.floor((Math.random() * 4));
+    }
+    if(random == 3) {
+        operand2 = "";
     }
 
     document.getElementById("questionOperand1").innerHTML = `${operand1} `;
@@ -67,6 +74,7 @@ function checkAnswer() {
     let operand1 = document.getElementById("questionOperand1");
     let operator = document.getElementById("questionOperator");
     let operand2 = document.getElementById("questionOperand2");
+    let operand2_number = operand2.innerHTML.slice(0, -1);
     let tmpOperator;
 
     let tmp = operator.innerHTML.slice(0, 1);
@@ -74,13 +82,20 @@ function checkAnswer() {
         tmpOperator = '*';
     } else if(escape(tmp) == '%F7') {
         tmpOperator = '/';
+    } else if(escape(tmp) == '%B2') {
+        tmpOperator = '**';
+        operand2_number = 2;
     } else {
         tmpOperator = tmp;
     }
     tmpOperator = tmpOperator + " ";
 
-    let currentQuestion = operand1.innerHTML + tmpOperator + operand2.innerHTML.slice(0, -1);
+    let currentQuestion = operand1.innerHTML + tmpOperator + operand2_number;
     let currentAnswer = eval(currentQuestion);
+
+    console.log(currentQuestion)
+    console.log(currentAnswer)
+    
     currentQuestion = operand1.innerHTML + tmp.concat(" ") + operand2.innerHTML.slice(0, -1);
     let answerIsCorrect = (answer.innerHTML == currentAnswer && answer.innerHTML != "");
 
@@ -115,6 +130,8 @@ function startTimer() {
     let minutesTimer = document.getElementById("minutesTimer");
     minutesTimer.innerHTML = "00";
     secondsTimer.innerHTML = "00";
+    clearAnswer();
+    generateNewQuestion();
 
     timer = setInterval(updateTimer, 1000);
 }
