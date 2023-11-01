@@ -21,10 +21,11 @@ let results = [
 ];
 
 let data = [
-    {questionsNeeded: results[0].questionsNeeded}
+    {questionsNeeded: results[0].questionsNeeded, gameMode: 'classic'}
 ];
 
 let timer;
+let timerSkipSeconds = 0;
 
 /// functions concerning the answer to the maths question
 
@@ -81,6 +82,14 @@ function checkAnswer() {
 
     let currentQuestion = operand1.innerHTML + tmpOperator + operand2.innerHTML.slice(0, -1);
     let currentAnswer = eval(currentQuestion);
+
+    if(currentAnswer > 100) {
+        if(currentQuestion.length == 8) {
+            timerSkipSeconds += 4;
+        }
+        timerSkipSeconds += 2;
+    }
+
     currentQuestion = operand1.innerHTML + tmp.concat(" ") + operand2.innerHTML.slice(0, -1);
     let answerIsCorrect = (answer.innerHTML == currentAnswer && answer.innerHTML != "");
 
@@ -102,6 +111,16 @@ function updateTimer() {
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
     
+    secondsTimer.style.color = "black";
+    minutesTimer.style.color = "black";
+
+    if(timerSkipSeconds) {
+        timerSkipSeconds--;
+        secondsTimer.style.color = "gold";
+        minutesTimer.style.color = "gold";
+        return
+    }
+
     if(secondsTimer.innerHTML == '59') {
         secondsTimer.innerHTML = '00';
         minutesTimer.innerHTML = `${+minutesTimer.innerHTML + 1}`.padStart(2, "0");

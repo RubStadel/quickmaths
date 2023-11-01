@@ -23,7 +23,7 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
     * [ ] '0' and '1' [converting decimal numbers to binary]
     * [ ] comma (',', decimal separator) instead of '-' [questions with rational fractions as answers]
     * [ ] time values (four digits, ':' in answer is either permanent or instead of '-') [starting time + time delta e.g. 14:23 + 00:46]
-* [ ] update README.md to include setup instructions
+* [ ] **update README.md to include setup instructions**
 
 ### WebApp
 
@@ -46,6 +46,8 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
 * [x] add 'play again' button to resultsOverlay
 * [x] test sending data of multiple games at once
 * [x] rename files to reflect the game mode they are associated with
+* [x] add buffer zone around number buttons to avoid accidental misplaced touches
+* [x] reward the player for correctly answering difficult questions by pausing the timer for a few seconds (2s for medium; 4s for hard)
 
 ### Server
 

@@ -27,6 +27,7 @@ let data = [
 ];
 
 let timer;
+let timerSkipSeconds = 0;
 
 /// functions concerning the answer to the maths question
 
@@ -53,7 +54,7 @@ function generateNewQuestion() {
 
     if((operand1 % operand2 == 0) && (operand1 != 0)) {
         random = Math.floor((Math.random() * 6));
-    } else if(operand1 >= operand2){
+    } else if((operand1 >= operand2) && (operand1 != 0)){
         random = Math.floor((Math.random() * 5));
     } else {
         random = Math.floor((Math.random() * 4));
@@ -93,9 +94,13 @@ function checkAnswer() {
     let currentQuestion = operand1.innerHTML + tmpOperator + operand2_number;
     let currentAnswer = eval(currentQuestion);
 
-    console.log(currentQuestion)
-    console.log(currentAnswer)
-    
+    if(currentAnswer > 100) {
+        if(currentQuestion.length == 8 || tmpOperator == "**") {
+            timerSkipSeconds += 4;
+        }
+        timerSkipSeconds += 2;
+    }
+
     currentQuestion = operand1.innerHTML + tmp.concat(" ") + operand2.innerHTML.slice(0, -1);
     let answerIsCorrect = (answer.innerHTML == currentAnswer && answer.innerHTML != "");
 
@@ -117,6 +122,16 @@ function updateTimer() {
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
     
+    secondsTimer.style.color = "black";
+    minutesTimer.style.color = "black";
+
+    if(timerSkipSeconds) {
+        timerSkipSeconds--;
+        secondsTimer.style.color = "gold";
+        minutesTimer.style.color = "gold";
+        return
+    }
+
     if(secondsTimer.innerHTML == '59') {
         secondsTimer.innerHTML = '00';
         minutesTimer.innerHTML = `${+minutesTimer.innerHTML + 1}`.padStart(2, "0");

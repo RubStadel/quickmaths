@@ -185,10 +185,11 @@ button:hover {
 
 .numberButton {
     width: 33vw;
-    height: 11vh;
+    height: 9vh;
     color: black;
     background: white;
     font-size: 5vh;
+    margin: 0 3vw;
 }
 
 .numberButton:hover {
