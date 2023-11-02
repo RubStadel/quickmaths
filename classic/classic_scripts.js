@@ -54,7 +54,7 @@ function generateNewQuestion() {
     let operand2 = Math.floor((Math.random() * 21));
     let random;
 
-    if((operand1 % operand2 == 0) && (operand1 != 0)) {
+    if((operand1 % operand2 == 0) && (operand2 != 0)) {
         random = Math.floor((Math.random() * 4));
     } else {
         random = Math.floor((Math.random() * 3));
@@ -97,9 +97,9 @@ function checkAnswer() {
             stopGame();
         }
 
-        if(currentAnswer > 100) {
+        if(currentAnswer > 100 && (operand1.innerHTML.slice(0, -1) % 10) && (operand2.innerHTML.slice(0, -1) % 10)) {
             if(currentQuestion.length == 8) {
-                timerSkipSeconds.total += 4;
+                timerSkipSeconds.total += 2;
             }
             timerSkipSeconds.total += 2;
         }
@@ -220,9 +220,10 @@ function stopGame() {
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
 
-    data.push({seconds: (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML - (timerSkipSeconds.total - timerSkipSeconds.current)), questions: (results.length)});
+    let finalTime = (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML - (timerSkipSeconds.total - timerSkipSeconds.current));
+    data.push({seconds: finalTime, questions: (results.length)});
 
-    textField.innerHTML = `time: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].questionsNeeded}/${(results.length)}`;
+    textField.innerHTML = `time: ${parseInt(finalTime / 60)}:${finalTime % 60}<br><br>questions: ${results[0].questionsNeeded}/${(results.length)}`;
     document.getElementById("scoreNav").style.height = "100%";
 
     Telegram.WebApp.MainButton.show();
