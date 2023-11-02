@@ -106,8 +106,9 @@ function checkAnswer() {
     }
 
     let secondsTimer = document.getElementById("secondsTimer");
-    let currentTime = +secondsTimer.innerHTML + timerSkipSeconds.current - timeDelta;
-    timeDelta = +secondsTimer.innerHTML + timerSkipSeconds.current;
+    let minutesTimer = document.getElementById("minutesTimer");
+    let currentTime = +minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML + timerSkipSeconds.current - timeDelta;
+    timeDelta = +minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML + timerSkipSeconds.current;
 
     results.push({question: currentQuestion, actualAnswer: currentAnswer, givenAnswer: answer.innerHTML, answeredCorrectly: answerIsCorrect, time: currentTime});
     clearAnswer();
@@ -288,7 +289,7 @@ function stopPracticeGame() {
 
     // data.push({seconds: (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML), questions: (results.length)});
 
-    textField.innerHTML = `time: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].correctAnswers}/${(results.length)}`;
+    textField.innerHTML = `time: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].correctAnswers}/${(results.length - 1)}`;
     document.getElementById("scoreNav").style.height = "100%";
 
     Telegram.WebApp.MainButton.onClick(() => {Telegram.WebApp.close();}).show();
