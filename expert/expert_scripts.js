@@ -10,12 +10,9 @@ Telegram.WebApp.MainButton.setText('finish').onClick(function () {
 });
 
 let operators = [
-    ['+', '+'],
-    ['-', '-'],
-    ['*', '\u22C5'],
-    ['**', '\u00B2'],
+    ['**', '<sup>'],
     ['%', '%'],
-    ['/', '\u00F7']
+    ['**', '<sup>']
 ];
 
 let results = [
@@ -23,7 +20,7 @@ let results = [
 ];
 
 let data = [
-    {questionsNeeded: results[0].questionsNeeded, gameMode: 'advanced'}
+    {questionsNeeded: results[0].questionsNeeded, gameMode: 'expert'}
 ];
 
 let timer;
@@ -52,24 +49,30 @@ function clearAnswer() {
 /// function for generating new maths questions
 
 function generateNewQuestion() {
-    let operand1 = Math.floor((Math.random() * 21));
-    let operand2 = Math.floor((Math.random() * 21));
-    let random;
+    let operand1 = Math.floor((Math.random() * 17));
+    let operand2 = Math.floor((Math.random() * 17));
+    let random = Math.floor((Math.random() * 3));
 
-    if((operand1 % operand2 == 0) && (operand2 != 0)) {
-        random = Math.floor((Math.random() * 6));
-    } else if((operand1 >= operand2) && (operand2 != 0)){
-        random = Math.floor((Math.random() * 5));
-    } else {
-        random = Math.floor((Math.random() * 4));
-    }
-    if(random == 3) {
-        operand2 = "";
+    switch(random) {
+        case 0:
+            operand1 = 2;
+            operand2 += "</sup>";
+            break;
+        case 1:
+            operand1 *= Math.floor((Math.random() * 6) + 11);
+            operand1 += " ";
+            if(operand2 == 0) {
+                operand2 += Math.floor((Math.random() * 16) + 1);
+            }
+            break;
+        case 2:
+            operand1 += operand2;
+            operand2 = "2</sup>";
+            break;
     }
 
-    document.getElementById("questionOperand1").innerHTML = `${operand1} `;
-    document.getElementById("questionOperator").innerHTML = `${operators[random][1]} `;
-    document.getElementById("questionOperand2").innerHTML = `${operand2} =`;
+    document.getElementById("questionOperand1").innerHTML = `${operand1}`;
+    document.getElementById("questionOperator+").innerHTML = `${operators[random][1]} ${operand2} =`;
 }
 
 /// function to check answer
@@ -77,28 +80,22 @@ function generateNewQuestion() {
 function checkAnswer() {
     let answer = document.getElementById("answerField");
     let operand1 = document.getElementById("questionOperand1");
-    let operator = document.getElementById("questionOperator");
-    let operand2 = document.getElementById("questionOperand2");
-    let operand2_number = operand2.innerHTML.slice(0, -1);
-    let tmpOperator;
+    let operator = document.getElementById("questionOperator+");
+    let tmpOperator, operand2_number;
 
-    let tmp = operator.innerHTML.slice(0, 1);
-    if(escape(tmp) == '%u22C5') {
-        tmpOperator = '*';
-    } else if(escape(tmp) == '%F7') {
-        tmpOperator = '/';
-    } else if(escape(tmp) == '%B2') {
+    let tmp = operator.innerHTML;
+    if(tmp.slice(0, 5) == '<sup>') {
         tmpOperator = '**';
-        operand2_number = 2;
+        operand2_number = tmp.slice(6, -8);
     } else {
-        tmpOperator = tmp;
+        tmpOperator = tmp.slice(0, 1);
+        operand2_number = tmp.slice(2, -2);
     }
-    tmpOperator = tmpOperator + " ";
 
     let currentQuestion = operand1.innerHTML + tmpOperator + operand2_number;
     let currentAnswer = eval(currentQuestion);
 
-    currentQuestion = operand1.innerHTML + tmp.concat(" ") + operand2.innerHTML.slice(0, -1);
+    currentQuestion = operand1.innerHTML + tmp.slice(0, -1);
     let answerIsCorrect = (answer.innerHTML == currentAnswer && answer.innerHTML != "");
 
     if(answerIsCorrect) {
@@ -108,11 +105,10 @@ function checkAnswer() {
             stopGame();
         }
 
-        if(currentAnswer > 100 && (operand1.innerHTML.slice(0, -1) % 10) && (operand2_number % 10)) {
-            if(currentQuestion.length == 8 || tmpOperator == "** ") {
-                timerSkipSeconds.total += 2;
-            }
-            timerSkipSeconds.total += 2;
+        let questionIsHard = (tmpOperator == "**" && (operand1.innerHTML > 15 || operand2_number > 10));
+        
+        if(questionIsHard) {
+            timerSkipSeconds.total += 8;
         }
     }
 
@@ -239,7 +235,7 @@ function stopGame() {
     let finalTime = (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML - (timerSkipSeconds.total - timerSkipSeconds.current));
     data.push({seconds: finalTime, questions: (results.length)});
 
-    textField.innerHTML = `time: ${parseInt(finalTime / 60)}:${finalTime % 60}<br><br>questions: ${results[0].questionsNeeded}/${(results.length)}`;
+    textField.innerHTML = `time: ${String(parseInt(finalTime / 60)).padStart(2, "0")}:${finalTime % 60}<br><br>questions: ${results[0].questionsNeeded}/${(results.length)}`;
     document.getElementById("scoreNav").style.height = "100%";
 
     Telegram.WebApp.MainButton.show();

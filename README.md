@@ -15,7 +15,7 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
     * [ ] classic_long: more questions (e.g. 50)
     * [x] endless/practice runs without scores (no results saved)
     * [x] advanced: other operators (e.g. modulo '%', numbers squared)
-    * [ ] dual_powers: two to the power of x
+    * [x] expert: two to the power of x(up to 16), modulo, numbers squared (no 'easy' questions) [two numbers up to 16, for option 2: add '0' to first number, for option 3: use sum(numbers)]
     * [ ] annual: years (e.g. 2023 - 67)
   * (completely) different keyboard:
     * [ ] higher ('>'), lower ('<') and equal ('=') [including questions with weird fractions, sqrt(), sin(), powers and similar stuff]

@@ -215,11 +215,16 @@ function restartGame() {
 
 function stopGame() {
     clearInterval(timer);
+    timerSkipSeconds = {total: 0, current: 0};
+    timeDelta = 0;
 
     let textField = document.getElementById("scoreTextField");
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
 
+    secondsTimer.style.color = "black";
+    minutesTimer.style.color = "black";
+    
     let finalTime = (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML - (timerSkipSeconds.total - timerSkipSeconds.current));
     data.push({seconds: finalTime, questions: (results.length)});
 
@@ -283,12 +288,15 @@ function startPracticeGame() {
 
 function stopPracticeGame() {
     clearInterval(timer);
+    timerSkipSeconds = {total: 0, current: 0};
+    timeDelta = 0;
 
     let textField = document.getElementById("scoreTextField");
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
 
-    // data.push({seconds: (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML), questions: (results.length)});
+    secondsTimer.style.color = "black";
+    minutesTimer.style.color = "black";
 
     textField.innerHTML = `time: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].correctAnswers}/${(results.length - 1)}`;
     document.getElementById("scoreNav").style.height = "100%";

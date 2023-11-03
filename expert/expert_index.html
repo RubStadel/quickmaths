@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!--
+    Simple static Telegram WebApp. Does not verify the WebAppInitData.
+-->
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>quickmaths expert</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script lang="javascript" src="expert_scripts.js"></script>
+	<link rel="stylesheet" href="expert_styles.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+</head>
+
+<body onload="document.getElementById('column').style.backgroundColor = 'white';">
+    <div id="column">
+        <div class="row" id="topRow">
+            <div id="questionCount">0/20</div>
+            <div id="minutesTimer">00</div>:
+            <div id="secondsTimer">00</div>
+			<button class="invertedButtonColors" id="stopPracticeButton" onclick="stopPracticeGame();">stop</button>
+        </div>
+        <div class="row" id="mainRow">
+            <div id="questionOperand1">2</div>
+            <div id="questionOperator+"><sup> 3</sup> =</div>
+            <!-- <div id="questionOperand2"> =</div> -->
+            <div id="answerField"></div>
+        </div>
+        <div class="row" id="submitRow">
+            <button id="submitAnswerButton" onclick="checkAnswer()">submit</button>
+        </div>
+        <div class="row">
+            <button class="numberButton" onclick="addChar('1')">1</button>
+            <button class="numberButton" onclick="addChar('2')">2</button>
+            <button class="numberButton" onclick="addChar('3')">3</button>
+        </div>
+        <div class="row">
+            <button class="numberButton" onclick="addChar('4')">4</button>
+            <button class="numberButton" onclick="addChar('5')">5</button>
+            <button class="numberButton" onclick="addChar('6')">6</button>
+        </div>
+        <div class="row">
+            <button class="numberButton" onclick="addChar('7')">7</button>
+            <button class="numberButton" onclick="addChar('8')">8</button>
+            <button class="numberButton" onclick="addChar('9')">9</button>
+        </div>
+        <div class="row">
+            <button class="numberButton" onclick="addChar('-')">&minus;</button>
+            <button class="numberButton" onclick="addChar('0')">0</button>
+            <!-- <button class="numberButton" onclick="removeChar()">&#x1F818;</button> -->
+            <button class="numberButton" onclick="removeChar()">&#x2B05;</button>
+        </div>
+    </div>
+
+    <div id="landingNav" class="overlay">
+		<div class="overlay-content">
+            <p>quickmaths <em>expert</em></p>
+            <br>
+			<button class="invertedButtonColors" id="howToPlayButton" onclick="showHowToPlay();">how to play</button><br><br>
+            <div id="landingTextField">
+                Inspired by the mental arithmetics game originally created by 
+                <a href="https://www.youtube.com/@answerinprogress" target="_blank" rel="noopener noreferrer" title="AIP on YouTube">
+                    <em>Answer in Progress</em>
+                </a>
+                in their video about math anxiety. 
+                <a href="https://youtu.be/xvOkXXprG2g?si=WWNTwtRDeu39E_JY" target="_blank" rel="noopener noreferrer" title="why do people hate math" style="color: #f20d0d">
+                    <ion-icon name="logo-youtube"></ion-icon>
+			    </a>
+            </div>
+            <button id="practiceButton" onclick="startPracticeGame();">practice mode</button>
+            <br>
+			<button id="startButton" onclick="startGame();">start</button>
+		</div>
+	</div>
+
+    <div id="scoreNav" class="overlay" style="height: 0%; transition: 0.4s;">
+		<div class="overlay-content">
+            <br><br>
+            <p id="scoreTextField"></p>
+			<button id="resultsButton" onclick="showResults();">view results</button>
+            <br><br>
+            <button onclick="restartGame();">play again</button>
+		</div>
+	</div>
+
+    <div id="resultsNav" class="overlay" style="height: 0%; transition: 0.4s; z-index: 3; overflow-y: visible;">
+		<div class="overlay-content">
+            <p id="resultsTextField"></p>
+			<a href="javascript:void(0)" class="closebtn" id="resultsCloseButton" onclick="hideResults();">&times;</a>
+		</div>
+	</div>
+
+    <script type="module" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>

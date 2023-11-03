@@ -46,6 +46,12 @@ game_mode_constants:dict[dict] = {                                              
         "relative_table": sh.worksheet('advanced, relative'),
         "time_min": 40
     },
+    "expert": {
+        "questions_needed": 20,
+        "absolute_table": sh.worksheet('expert, absolute'),
+        "relative_table": sh.worksheet('expert, relative'),
+        "time_min": 60
+    },
 }
 
 def conditional_round(x:float) -> float:
