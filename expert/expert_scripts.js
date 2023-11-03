@@ -101,14 +101,10 @@ function checkAnswer() {
     if(answerIsCorrect) {
         results[0].correctAnswers++;
         document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers}/${results[0].questionsNeeded}`;
-        if(results[0].correctAnswers == results[0].questionsNeeded) {
-            stopGame();
-        }
 
         let questionIsHard = (tmpOperator == "**" && (operand1.innerHTML > 15 || operand2_number > 10));
-        
         if(questionIsHard) {
-            timerSkipSeconds.total += 8;
+            timerSkipSeconds.total += 4;
         }
     }
 
@@ -123,6 +119,10 @@ function checkAnswer() {
 
     if(!results[0].questionsNeeded) {
         document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers} (${results.length - 1 - results[0].correctAnswers})`;
+    }
+
+    if(results[0].correctAnswers == results[0].questionsNeeded) {
+        stopGame();
     }
 }
 
@@ -222,8 +222,6 @@ function restartGame() {
 
 function stopGame() {
     clearInterval(timer);
-    timerSkipSeconds = {total: 0, current: 0};
-    timeDelta = 0;
 
     let textField = document.getElementById("scoreTextField");
     let secondsTimer = document.getElementById("secondsTimer");
@@ -233,9 +231,13 @@ function stopGame() {
     minutesTimer.style.color = "black";
 
     let finalTime = (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML - (timerSkipSeconds.total - timerSkipSeconds.current));
-    data.push({seconds: finalTime, questions: (results.length)});
+    data.push({seconds: finalTime, questions: (results.length - 1)});
 
-    textField.innerHTML = `time: ${String(parseInt(finalTime / 60)).padStart(2, "0")}:${finalTime % 60}<br><br>questions: ${results[0].questionsNeeded}/${(results.length)}`;
+    timerSkipSeconds.total = 0;
+    timerSkipSeconds.current = 0;
+    timeDelta = 0;
+
+    textField.innerHTML = `time: ${String(parseInt(finalTime / 60)).padStart(2, "0")}:${String(finalTime % 60).padStart(2, "0")}<br><br>questions: ${results[0].questionsNeeded}/${(results.length - 1)}`;
     document.getElementById("scoreNav").style.height = "100%";
 
     Telegram.WebApp.MainButton.show();
@@ -295,8 +297,6 @@ function startPracticeGame() {
 
 function stopPracticeGame() {
     clearInterval(timer);
-    timerSkipSeconds = {total: 0, current: 0};
-    timeDelta = 0;
 
     let textField = document.getElementById("scoreTextField");
     let secondsTimer = document.getElementById("secondsTimer");
@@ -305,8 +305,14 @@ function stopPracticeGame() {
     secondsTimer.style.color = "black";
     minutesTimer.style.color = "black";
 
-    textField.innerHTML = `time: ${minutesTimer.innerHTML}:${secondsTimer.innerHTML}<br><br>questions: ${results[0].correctAnswers}/${(results.length - 1)}`;
+    let finalTime = (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML - (timerSkipSeconds.total - timerSkipSeconds.current));
+    
+    textField.innerHTML = `time: ${String(parseInt(finalTime / 60)).padStart(2, "0")}:${String(finalTime % 60).padStart(2, "0")}<br><br>questions: ${results[0].correctAnswers}/${(results.length - 1)}`;
     document.getElementById("scoreNav").style.height = "100%";
+
+    timerSkipSeconds.total = 0;
+    timerSkipSeconds.current = 0;
+    timeDelta = 0;
 
     Telegram.WebApp.MainButton.onClick(() => {Telegram.WebApp.close();}).show();
 }

@@ -50,11 +50,11 @@ game_mode_constants:dict[dict] = {                                              
         "questions_needed": 20,
         "absolute_table": sh.worksheet('expert, absolute'),
         "relative_table": sh.worksheet('expert, relative'),
-        "time_min": 60
+        "time_min": 40
     },
 }
 
-def conditional_round(x:float) -> float:
+async def conditional_round(x:float) -> float:
     if (x >= 10.0):
         return int(round(x, 0))
     elif (x >= 1.0):
@@ -63,7 +63,7 @@ def conditional_round(x:float) -> float:
         return round(x, 2)
 
 
-def score_calculation(game_mode_info:dict, game_results:dict) -> float:
+async def score_calculation(game_mode_info:dict, game_results:dict) -> float:
     time_min = game_mode_constants[game_mode_info['gameMode']]['time_min']
 
     return ((100 * math.exp(-((game_results['seconds'] - time_min) / 90) * (30 / time_min))) * (1 - math.sqrt(1 - (game_mode_info['questionsNeeded'] / game_results['questions']))))
@@ -237,7 +237,7 @@ async def show_relative_leaderboard(game_mode:str, update: Update, context: Cont
 
     user_cell = table.find(username, in_column=1)
     if user_cell:
-        percentile = conditional_round(((user_cell.row - 1) / (table.row_count - 1)) * 100)
+        percentile = await conditional_round(((user_cell.row - 1) / (table.row_count - 1)) * 100)
         user_data = table.row_values(user_cell.row)
         text += f"With an average score of {round(float(user_data[1]), 3)} points\n"
         text += f"you are in the top {percentile}% of all {table.row_count - 1} players."
@@ -262,12 +262,10 @@ async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     username = update.effective_user.username if (update.effective_user.username) else update.effective_user.first_name
     game_mode = data[0]['gameMode']
 
-    scores = []
     highest_score = 0
     highest_score_index = 0
-    for i in range(1,len(data)):
-        score = score_calculation(data[0], data[i])
-        scores.append(score)
+    for i in range(1, len(data)):
+        score = await score_calculation(data[0], data[i])
         
         if score > highest_score:
             highest_score = round(score, 2)
@@ -296,7 +294,7 @@ async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     text:str = f"Congratulations, "
     text = (text + f"{username}.\n")
     text += f"Out of the {len(data) - 1} game(s) of quickmaths <em>{game_mode}</em> you just played, your best result were {highest_score} points for correctly answering "
-    text += f"{data[0]['questionsNeeded']}/{data[highest_score_index]['questions']} in {data[highest_score_index]['seconds']} seconds!\n"
+    text += f"{data[0]['questionsNeeded']}/{data[highest_score_index]['questions']} questions in {data[highest_score_index]['seconds']} seconds!\n"
     
     await update.message.reply_html(
         text=text,
