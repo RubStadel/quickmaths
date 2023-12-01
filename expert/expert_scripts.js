@@ -98,20 +98,21 @@ function checkAnswer() {
     currentQuestion = operand1.innerHTML + tmp.slice(0, -1);
     let answerIsCorrect = (answer.innerHTML == currentAnswer && answer.innerHTML != "");
 
-    if(answerIsCorrect) {
-        results[0].correctAnswers++;
-        document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers}/${results[0].questionsNeeded}`;
-
-        let questionIsHard = (tmpOperator == "**" && (operand1.innerHTML > 15 || operand2_number > 10));
-        if(questionIsHard) {
-            timerSkipSeconds.total += 4;
-        }
-    }
-
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
     let currentTime = +minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML + timerSkipSeconds.current - timeDelta;
     timeDelta = +minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML + timerSkipSeconds.current;
+
+    if(answerIsCorrect) {
+        results[0].correctAnswers++;
+        document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers}/${results[0].questionsNeeded}`;
+
+        let questionIsHard1 = (tmpOperator == "**" && (operand1.innerHTML > 20 || operand2_number > 10));
+        let questionIsHard2 = (tmpOperator == "/" && currentAnswer > 2 && ((operand2_number > 5 && operand1.innerHTML > 60) || (operand2_number > 10 && operand1.innerHTML > 30)));
+        if(questionIsHard1 || questionIsHard2) {
+            timerSkipSeconds.total += Math.round(currentTime * 0.75);
+        }
+    }
 
     results.push({question: currentQuestion, actualAnswer: currentAnswer, givenAnswer: answer.innerHTML, answeredCorrectly: answerIsCorrect, time: currentTime});
     clearAnswer();

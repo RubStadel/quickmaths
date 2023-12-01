@@ -90,22 +90,22 @@ function checkAnswer() {
     currentQuestion = operand1.innerHTML + tmp.concat(" ") + operand2.innerHTML.slice(0, -1);
     let answerIsCorrect = (answer.innerHTML == currentAnswer && answer.innerHTML != "");
 
+    let secondsTimer = document.getElementById("secondsTimer");
+    let minutesTimer = document.getElementById("minutesTimer");
+    let currentTime = +minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML + timerSkipSeconds.current - timeDelta;
+    timeDelta = +minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML + timerSkipSeconds.current;
+
     if(answerIsCorrect) {
         results[0].correctAnswers++;
         document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers}/${results[0].questionsNeeded}`;
 
         if(currentAnswer > 100 && (operand1.innerHTML.slice(0, -1) % 10) && (operand2.innerHTML.slice(0, -1) % 10)) {
             if(currentQuestion.length == 8) {
-                timerSkipSeconds.total += 2;
+                timerSkipSeconds.total += Math.round(currentTime * 0.25);
             }
-            timerSkipSeconds.total += 2;
+            timerSkipSeconds.total += Math.round(currentTime * 0.5);
         }
     }
-
-    let secondsTimer = document.getElementById("secondsTimer");
-    let minutesTimer = document.getElementById("minutesTimer");
-    let currentTime = +minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML + timerSkipSeconds.current - timeDelta;
-    timeDelta = +minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML + timerSkipSeconds.current;
 
     results.push({question: currentQuestion, actualAnswer: currentAnswer, givenAnswer: answer.innerHTML, answeredCorrectly: answerIsCorrect, time: currentTime});
     clearAnswer();
