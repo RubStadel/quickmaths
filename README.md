@@ -48,7 +48,8 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
 * [x] test sending data of multiple games at once
 * [x] rename files to reflect the game mode they are associated with
 * [x] add buffer zone around number buttons to avoid accidental misplaced touches
-* [x] reward the player for correctly answering difficult questions by pausing the timer for a few seconds (2s for medium; 4s for hard)
+* [x] reward the player for correctly answering difficult questions by pausing the timer for a few seconds  
+  -> (50% of time taken for hard questions; 75% for very hard questions)
 * [x] add time taken for each question to the results overlay
 
 ### Server

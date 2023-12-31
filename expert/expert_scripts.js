@@ -108,7 +108,7 @@ function checkAnswer() {
         document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers}/${results[0].questionsNeeded}`;
 
         let questionIsHard1 = (tmpOperator == "**" && (operand1.innerHTML > 20 || operand2_number > 10));
-        let questionIsHard2 = (tmpOperator == "/" && currentAnswer > 2 && ((operand2_number > 5 && operand1.innerHTML > 60) || (operand2_number > 10 && operand1.innerHTML > 30)));
+        let questionIsHard2 = (tmpOperator == "%" && currentAnswer > 2 && ((operand2_number > 5 && operand1.innerHTML > 60) || (operand2_number > 11 && operand1.innerHTML > 30)));
         if(questionIsHard1 || questionIsHard2) {
             timerSkipSeconds.total += Math.round(currentTime * 0.75);
         }
@@ -120,9 +120,7 @@ function checkAnswer() {
 
     if(!results[0].questionsNeeded) {
         document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers} (${results.length - 1 - results[0].correctAnswers})`;
-    }
-
-    if(results[0].correctAnswers == results[0].questionsNeeded) {
+    } else if(results[0].correctAnswers == results[0].questionsNeeded) {
         stopGame();
     }
 }

@@ -58,7 +58,7 @@ function generateNewQuestion() {
 
     if((operand1 % operand2 == 0) && (operand2 != 0)) {
         random = Math.floor((Math.random() * 6));
-    } else if((operand1 >= operand2) && (operand2 != 0)){
+    } else if((operand1 >= operand2) && (operand2 != 0)) {
         random = Math.floor((Math.random() * 5));
     } else {
         random = Math.floor((Math.random() * 4));
@@ -110,8 +110,11 @@ function checkAnswer() {
         results[0].correctAnswers++;
         document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers}/${results[0].questionsNeeded}`;
 
-        if(currentAnswer > 100 && (operand1.innerHTML.slice(0, -1) % 10) && (operand2_number % 10)) {
-            if(currentQuestion.length == 8 || tmpOperator == "** ") {
+        let questionIsHard1 = (currentAnswer > 100 && (operand1.innerHTML.slice(0, -1) % 10) && (operand2_number % 10));
+        let questionIsHard2 = (tmpOperator == "% " && currentAnswer > 2 && ((operand2_number > 5 && operand1.innerHTML > 60) || (operand2_number > 11 && operand1.innerHTML > 30)));
+        let questionIsHard3 = (tmpOperator == "% " && currentAnswer > 2 && (operand2_number > 11 && operand1.innerHTML > 30));
+        if(questionIsHard1 || questionIsHard2) {
+            if(currentQuestion.length == 8 || tmpOperator == "** " || questionIsHard3) {
                 timerSkipSeconds.total += Math.round(currentTime * 0.25);
             }
             timerSkipSeconds.total += Math.round(currentTime * 0.5);
@@ -124,9 +127,7 @@ function checkAnswer() {
 
     if(!results[0].questionsNeeded) {
         document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers} (${results.length - 1 - results[0].correctAnswers})`;
-    }
-
-    if(results[0].correctAnswers == results[0].questionsNeeded) {
+    } else if(results[0].correctAnswers == results[0].questionsNeeded) {
         stopGame();
     }
 }

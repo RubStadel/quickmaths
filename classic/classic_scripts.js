@@ -113,9 +113,7 @@ function checkAnswer() {
 
     if(!results[0].questionsNeeded) {
         document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers} (${results.length - 1 - results[0].correctAnswers})`;
-    }
-
-    if(results[0].correctAnswers == results[0].questionsNeeded) {
+    } else if(results[0].correctAnswers == results[0].questionsNeeded) {
         stopGame();
     }
 }
