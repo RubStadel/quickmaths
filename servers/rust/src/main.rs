@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use std::env;
 extern crate google_sheets4 as sheets4;
 use crate::hyper::client::HttpConnector;
@@ -140,7 +141,7 @@ fn make_inline_keyboard(context: &str) -> InlineKeyboardMarkup {
         "absolute" | "relative" => {
             for item in menu_items.chunks(1) {
                 let row = item
-                    .iter()
+                    .par_iter()
                     .map(|&item| {
                         InlineKeyboardButton::callback(
                             item.to_owned(),
@@ -155,7 +156,7 @@ fn make_inline_keyboard(context: &str) -> InlineKeyboardMarkup {
         "start" | "leaderboard" => {
             for item in menu_items.chunks(1) {
                 let row = item
-                    .iter()
+                    .par_iter()
                     .map(|&item| InlineKeyboardButton::callback(item.to_owned(), item.to_owned()))
                     .collect();
 
@@ -177,7 +178,7 @@ fn make_reply_keyboard() -> KeyboardMarkup {
 
     for mode in ALL_GAME_MODES.chunks(1) {
         let row = mode
-            .iter()
+            .par_iter()
             .map(|mode| {
                 KeyboardButton::new(mode.name.to_owned()).request(ButtonRequest::WebApp(
                     WebAppInfo {
