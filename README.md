@@ -11,6 +11,7 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
 * [x] design concept and game structure
 * [x] come up with new game modes:
   * same keyboard/principle:
+    * [x] mini: numbers up to 10
     * [ ] big_numbers: higher numbers (e.g. up to 50)
     * [ ] classic_long: more questions (e.g. 50)
     * [x] endless/practice runs without scores (no results saved)
@@ -18,10 +19,10 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
     * [x] expert: two to the power of x(up to 16), modulo, numbers squared (no 'easy' questions) [two numbers up to 16, for option 2: add '0' to first number, for option 3: use sum(numbers)]
     * [ ] annual: years (e.g. 2023 - 67)
   * (completely) different keyboard:
+    * [x] binary: '0..F' [converting numbers between binary, decimal and hexadecimal]
+    * ~~[ ] '0' and '1' [binary logic]~~
     * [ ] higher ('>'), lower ('<') and equal ('=') [including questions with weird fractions, sqrt(), sin(), powers and similar stuff]
     * [ ] higher ('>'), lower ('<') and equal ('=') [one value in dBm and one in W]
-    * [ ] '0' and '1' [binary logic]
-    * [ ] '0' and '1' [converting decimal numbers to binary]
     * [ ] comma (',', decimal separator) instead of '-' [questions with rational fractions as answers]
     * [ ] time values (four digits, ':' in answer is either permanent or instead of '-') [starting time + time delta e.g. 14:23 + 00:46]
 * [ ] **update README.md to include setup instructions**

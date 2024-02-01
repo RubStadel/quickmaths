@@ -1,6 +1,6 @@
 [package]
 name = "quickmaths_telegram_bot"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -8,8 +8,6 @@ edition = "2021"
 [dependencies]
 teloxide = { version = "0.12", features = ["macros"] }
 rayon = "1.8"
-log = "0.4"
-pretty_env_logger = "0.4"
 tokio = { version = "1.8", features = ["rt-multi-thread", "macros"] }
 url = { version = "2", features = ["serde"] }
 google-sheets4 = "*"

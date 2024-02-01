@@ -45,7 +45,19 @@ const EXPERT: GameMode = GameMode {
     time_min: 40_f32,
 };
 
-const ALL_GAME_MODES: [GameMode; 3] = [CLASSIC, ADVANCED, EXPERT];
+const BINARY: GameMode = GameMode {
+    name: "binary",
+    questions_needed: 10_f32,
+    time_min: 75_f32,
+};
+
+const MINI: GameMode = GameMode {
+    name: "mini",
+    questions_needed: 20_f32,
+    time_min: 20_f32,
+};
+
+const ALL_GAME_MODES: [GameMode; 5] = [MINI, CLASSIC, ADVANCED, EXPERT, BINARY];
 
 const SPREADSHEET_ID: &str = "REPLACE_WITH_SPREADSHEET_ID!!!";
 const ACCOUNT_CREDENTIALS: &str = "quickmaths_secret.json";
@@ -69,6 +81,9 @@ enum Command {
     /// Leaderboard, shortcut to leaderboard type selection menu
     #[command(description = "shortcut to leaderboard type selection menu.")]
     Leaderboard,
+    // Code, sends link to the source code (GitHub repository)
+    #[command(description = "display link to github repository.")]
+    Code,
 }
 
 #[tokio::main]
@@ -247,6 +262,15 @@ async fn message_handler(
                 bot.send_message(msg.chat.id, "Choose a leaderboard type:")
                     .reply_markup(keyboard)
                     .await?;
+            }
+            Ok(Command::Code) => {
+                // Send the link to the github repository
+                bot.send_message(
+                    msg.chat.id,
+                    "[Source Code](https://github.com/RubStadel/quickmaths 'GitHub repository')",
+                )
+                .parse_mode(ParseMode::MarkdownV2)
+                .await?;
             }
 
             Err(_) => {
