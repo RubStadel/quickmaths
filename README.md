@@ -69,4 +69,5 @@ A Telegram bot through which a number of mental arithmetics games (inspired by [
 * [x] decide on how to structure the leaderboards (two for each game mode [absolute: score, time and number of errors?; relative: average score, games played])
 * [x] enable saving of data to spreadsheet
 * [x] write logic to find and display leaderboards
+* [ ] add 'personal' leaderboard (best score & time and avgerage score for each game mode) (?)
 * [ ] comment and annotate code

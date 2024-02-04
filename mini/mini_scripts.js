@@ -21,7 +21,7 @@ let results = [
 ];
 
 let data = [
-    { questionsNeeded: results[0].questionsNeeded, gameMode: 'classic' }
+    { questionsNeeded: results[0].questionsNeeded, gameMode: 'mini' }
 ];
 
 let timer;

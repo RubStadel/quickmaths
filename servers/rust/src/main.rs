@@ -603,7 +603,8 @@ async fn web_app_data_handler(
         "{}Out of the {} game(s) of quickmaths <em>{}</em> you just played, your best result were {:.2} points for correctly answering {}/{} questions in {} seconds!\n",
         text,
         data_json.as_array().unwrap().len()-1,
-        game_mode.to_owned(), highest_score,
+        game_mode.to_owned(), 
+        highest_score,
         questions_needed,
         highest_score_stats["questions"].as_f64().unwrap(),
         highest_score_stats["seconds"].as_f64().unwrap()
