@@ -16,7 +16,7 @@ Absolute leaderboards show the best performances across all players while relati
 Selecting a game mode leads to the corresponding WebApp which can be opened through the keyboard buttons that appear.
 Multiple games can be played in a session and all of the statistics will be saved when exiting the WebApp and returning to Telegram.
 
-![Run-through of the button menu in the Telegram chat](.resources/menu.gif)
+![Run-through of the button menu in the Telegram chat](./resources/menu.gif)
 
 ---
 
