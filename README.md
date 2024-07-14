@@ -1,6 +1,22 @@
 # quickmaths
 
-A Telegram bot through which a number of mental arithmetics games (inspired by [Answer In Progress'](https://www.youtube.com/@answerinprogress "AIP on YouTube") [quick maths game](https://www.youtube.com/watch?v=xvOkXXprG2g "why do people hate math")) can be played in a mobile-optimized WebApp.
+A Telegram bot ([@quick_maths_bot](https://t.me/quick_maths_bot "Telegram")) through which a number of mental arithmetics games (inspired by [Answer In Progress'](https://www.youtube.com/@answerinprogress "AIP on YouTube") [quick maths game](https://www.youtube.com/watch?v=xvOkXXprG2g "why do people hate math")) can be played in a mobile-optimized WebApp.
+Includes additional game modes and user scoreboards.  
+
+The bot is currently running on my Raspberry Pi Zero.
+It was first written in Python for the sake of simplicity but rewritten in Rust for better performance.
+
+---
+
+## Menu
+
+When opening the Bot, the user is guided through a menu of in-line buttons to their desired action.  
+Leaderboards are shown as lists in the chat and are separated into two groups.
+Absolute leaderboards show the best performances across all players while relative ones show only those relating to the user (average points and placement in relation to other players).  
+Selecting a game mode leads to the corresponding WebApp which can be opened through the keyboard buttons that appear.
+Multiple games can be played in a session and all of the statistics will be saved when exiting the WebApp and returning to Telegram.
+
+![Run-through of the button menu in the Telegram chat](.resources/menu.gif)
 
 ---
 
