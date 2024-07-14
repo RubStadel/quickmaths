@@ -41,6 +41,7 @@ Multiple games can be played in a session and all of the statistics will be save
     * [ ] higher ('>'), lower ('<') and equal ('=') [one value in dBm and one in W]
     * [ ] comma (',', decimal separator) instead of '-' [questions with rational fractions as answers]
     * [ ] time values (four digits, ':' in answer is either permanent or instead of '-') [starting time + time delta e.g. 14:23 + 00:46]
+  * [ ] countdown: timer counts down and time is added for correct answers (per mode, similar to endless mode)
 * [ ] **update README.md to include setup instructions**
 
 ### WebApp
