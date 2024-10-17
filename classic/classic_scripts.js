@@ -17,11 +17,11 @@ let operators = [
 ];
 
 let results = [
-    {correctAnswers: 0, questionsNeeded: 20}
+    { correctAnswers: 0, questionsNeeded: 20 }
 ];
 
 let data = [
-    {questionsNeeded: results[0].questionsNeeded, gameMode: 'classic'}
+    { questionsNeeded: results[0].questionsNeeded, gameMode: 'classic' }
 ];
 
 let timer;
@@ -54,7 +54,7 @@ function generateNewQuestion() {
     let operand2 = Math.floor((Math.random() * 21));
     let random;
 
-    if((operand1 % operand2 == 0) && (operand2 != 0)) {
+    if ((operand1 % operand2 == 0) && (operand2 != 0)) {
         random = Math.floor((Math.random() * 4));
     } else {
         random = Math.floor((Math.random() * 3));
@@ -75,9 +75,9 @@ function checkAnswer() {
     let tmpOperator;
 
     let tmp = operator.innerHTML.slice(0, 1);
-    if(escape(tmp) == '%u22C5') {
+    if (escape(tmp) == '%u22C5') {
         tmpOperator = '*';
-    } else if(escape(tmp) == '%F7') {
+    } else if (escape(tmp) == '%F7') {
         tmpOperator = '/';
     } else {
         tmpOperator = tmp;
@@ -95,25 +95,28 @@ function checkAnswer() {
     let currentTime = +minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML + timerSkipSeconds.current - timeDelta;
     timeDelta = +minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML + timerSkipSeconds.current;
 
-    if(answerIsCorrect) {
+    if (answerIsCorrect) {
         results[0].correctAnswers++;
         document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers}/${results[0].questionsNeeded}`;
+        document.getElementById("submitAnswerButton").style.backgroundColor = "darkgreen";
 
-        if(currentAnswer > 100 && (operand1.innerHTML.slice(0, -1) % 10) && (operand2.innerHTML.slice(0, -1) % 10)) {
-            if(currentQuestion.length == 8) {
+        if (currentAnswer > 100 && (operand1.innerHTML.slice(0, -1) % 10) && (operand2.innerHTML.slice(0, -1) % 10)) {
+            if (currentQuestion.length == 8) {
                 timerSkipSeconds.total += Math.round(currentTime * 0.25);
             }
             timerSkipSeconds.total += Math.round(currentTime * 0.5);
         }
+    } else {
+        document.getElementById("submitAnswerButton").style.backgroundColor = "#f20d0d";
     }
 
-    results.push({question: currentQuestion, actualAnswer: currentAnswer, givenAnswer: answer.innerHTML, answeredCorrectly: answerIsCorrect, time: currentTime});
+    results.push({ question: currentQuestion, actualAnswer: currentAnswer, givenAnswer: answer.innerHTML, answeredCorrectly: answerIsCorrect, time: currentTime });
     clearAnswer();
     generateNewQuestion();
 
-    if(!results[0].questionsNeeded) {
+    if (!results[0].questionsNeeded) {
         document.getElementById("questionCount").innerHTML = `${results[0].correctAnswers} (${results.length - 1 - results[0].correctAnswers})`;
-    } else if(results[0].correctAnswers == results[0].questionsNeeded) {
+    } else if (results[0].correctAnswers == results[0].questionsNeeded) {
         stopGame();
     }
 }
@@ -123,18 +126,23 @@ function checkAnswer() {
 function updateTimer() {
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
-    
+    let timeFreeze = document.getElementById("timeFreeze");
+
     secondsTimer.style.color = "black";
     minutesTimer.style.color = "black";
+    timeFreeze.style.color = "transparent";
 
-    if(timerSkipSeconds.total - timerSkipSeconds.current) {
+    document.getElementById("submitAnswerButton").style.backgroundColor = "black";
+
+    if (timerSkipSeconds.total - timerSkipSeconds.current) {
         timerSkipSeconds.current++;
-        secondsTimer.style.color = "gold";
-        minutesTimer.style.color = "gold";
+        secondsTimer.style.color = "paleturquoise";
+        minutesTimer.style.color = "paleturquoise";
+        timeFreeze.style.color = "paleturquoise";
         return
     }
 
-    if(secondsTimer.innerHTML == '59') {
+    if (secondsTimer.innerHTML == '59') {
         secondsTimer.innerHTML = '00';
         minutesTimer.innerHTML = `${+minutesTimer.innerHTML + 1}`.padStart(2, "0");
     } else {
@@ -158,8 +166,8 @@ function startTimer() {
 function showHowToPlay() {
     let btn = document.getElementById("howToPlayButton");
     let textField = document.getElementById("landingTextField");
-    textField.innerHTML = 
-    "Correctly answer twenty maths questions.<br>\
+    textField.innerHTML =
+        "Correctly answer twenty maths questions.<br>\
     The questions are randomized and include numbers up to 20.<br>\
     The score is based on your time and the amount of questions answered incorrectly.\
     High scores of close to 100 can only be achieved without making mistakes, so don't skip hard questions!";
@@ -172,8 +180,8 @@ function showHowToPlay() {
 function hideHowToPlay() {
     let btn = document.getElementById("howToPlayButton");
     let textField = document.getElementById("landingTextField");
-    textField.innerHTML = 
-    "Inspired by the mental arithmetics game originally created by \
+    textField.innerHTML =
+        "Inspired by the mental arithmetics game originally created by \
     <a id='linkAIP' href='https://www.youtube.com/@answerinprogress' target='_blank' rel='noopener noreferrer' title='AIP on YouTube'>\
         <em>Answer in Progress</em></a> \
     in their video about math anxiety. \
@@ -196,13 +204,13 @@ function startGame() {
 
 function restartGame() {
     results = [
-        {correctAnswers: 0, questionsNeeded: results[0].questionsNeeded},
+        { correctAnswers: 0, questionsNeeded: results[0].questionsNeeded },
     ];
 
     document.getElementById("scoreNav").style.height = "0%";
     document.getElementById("questionCount").innerHTML = `0/${results[0].questionsNeeded}`;
 
-    if(!results[0].questionsNeeded) {
+    if (!results[0].questionsNeeded) {
         document.getElementById("questionCount").innerHTML = `0 (0)`;
     }
 
@@ -218,13 +226,15 @@ function stopGame() {
     let textField = document.getElementById("scoreTextField");
     let secondsTimer = document.getElementById("secondsTimer");
     let minutesTimer = document.getElementById("minutesTimer");
+    let timeFreeze = document.getElementById("timeFreeze");
 
     secondsTimer.style.color = "black";
     minutesTimer.style.color = "black";
-    
+    timeFreeze.style.color = "transparent";
+
     let finalTime = (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML - (timerSkipSeconds.total - timerSkipSeconds.current));
-    data.push({seconds: finalTime, questions: (results.length - 1)});
-    
+    data.push({ seconds: finalTime, questions: (results.length - 1) });
+
     timerSkipSeconds.total = 0;
     timerSkipSeconds.current = 0;
     timeDelta = 0;
@@ -244,18 +254,18 @@ function showResults() {
 
     resultsNav.style.height = "100%";
     closebtn.style.display = "block";
-    
+
     let questionResult;
-    for(let i = 1; i < results.length; i++) {
+    for (let i = 1; i < results.length; i++) {
         if (results[i].answeredCorrectly == false) {
-            questionResult = 
-            `<span style='color: darkred;'><big><b>Question ${i}</b></big><br>\
+            questionResult =
+                `<span style='color: darkred;'><big><b>Question ${i}</b></big><br>\
             ${results[i].question} &ne; ${results[i].givenAnswer}<br>\
             correct answer: ${results[i].actualAnswer}<br>\
             <small>${results[i].time} second(s)</small></span><br>`;
         } else {
-            questionResult = 
-            `<span><big><b>Question ${i}</b></big><br>\
+            questionResult =
+                `<span><big><b>Question ${i}</b></big><br>\
             ${results[i].question} &#x003D; ${results[i].givenAnswer}<br>\
             <small>${results[i].time} second(s)</small></span><br>`;
         }
@@ -298,7 +308,7 @@ function stopPracticeGame() {
     minutesTimer.style.color = "black";
 
     let finalTime = (+minutesTimer.innerHTML * 60 + +secondsTimer.innerHTML - (timerSkipSeconds.total - timerSkipSeconds.current));
-    
+
     textField.innerHTML = `time: ${String(parseInt(finalTime / 60)).padStart(2, "0")}:${String(finalTime % 60).padStart(2, "0")}<br><br>questions: ${results[0].correctAnswers}/${(results.length - 1)}`;
     document.getElementById("scoreNav").style.height = "100%";
 
@@ -306,5 +316,5 @@ function stopPracticeGame() {
     timerSkipSeconds.current = 0;
     timeDelta = 0;
 
-    Telegram.WebApp.MainButton.onClick(() => {Telegram.WebApp.close();}).show();
+    Telegram.WebApp.MainButton.onClick(() => { Telegram.WebApp.close(); }).show();
 }

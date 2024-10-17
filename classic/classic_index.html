@@ -9,7 +9,7 @@
     <title>quickmaths classic</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script lang="javascript" src="classic_scripts.js"></script>
-	<link rel="stylesheet" href="classic_styles.css"/>
+    <link rel="stylesheet" href="classic_styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
@@ -21,7 +21,8 @@
             <div id="questionCount">0/20</div>
             <div id="minutesTimer">00</div>:
             <div id="secondsTimer">00</div>
-			<button class="invertedButtonColors" id="stopPracticeButton" onclick="stopPracticeGame();">stop</button>
+            <div id="timeFreeze"><ion-icon name="snow"></ion-icon></div>
+            <button class="invertedButtonColors" id="stopPracticeButton" onclick="stopPracticeGame();">stop</button>
         </div>
         <div class="row" id="mainRow">
             <div id="questionOperand1">1 </div>
@@ -56,42 +57,45 @@
     </div>
 
     <div id="landingNav" class="overlay">
-		<div class="overlay-content">
+        <div class="overlay-content">
             <p>quickmaths <em>classic</em></p>
             <br>
-			<button class="invertedButtonColors" id="howToPlayButton" onclick="showHowToPlay();">how to play</button><br><br>
+            <button class="invertedButtonColors" id="howToPlayButton" onclick="showHowToPlay();">how to
+                play</button><br><br>
             <div id="landingTextField">
-                Inspired by the mental arithmetics game originally created by 
-                <a href="https://www.youtube.com/@answerinprogress" target="_blank" rel="noopener noreferrer" title="AIP on YouTube">
+                Inspired by the mental arithmetics game originally created by
+                <a href="https://www.youtube.com/@answerinprogress" target="_blank" rel="noopener noreferrer"
+                    title="AIP on YouTube">
                     <em>Answer in Progress</em>
                 </a>
-                in their video about math anxiety. 
-                <a href="https://youtu.be/xvOkXXprG2g?si=WWNTwtRDeu39E_JY" target="_blank" rel="noopener noreferrer" title="why do people hate math" style="color: #f20d0d">
+                in their video about math anxiety.
+                <a href="https://youtu.be/xvOkXXprG2g?si=WWNTwtRDeu39E_JY" target="_blank" rel="noopener noreferrer"
+                    title="why do people hate math" style="color: #f20d0d">
                     <ion-icon name="logo-youtube"></ion-icon>
-			    </a>
+                </a>
             </div>
             <button id="practiceButton" onclick="startPracticeGame();">practice mode</button>
             <br>
-			<button id="startButton" onclick="startGame();">start</button>
-		</div>
-	</div>
+            <button id="startButton" onclick="startGame();">start</button>
+        </div>
+    </div>
 
     <div id="scoreNav" class="overlay" style="height: 0%; transition: 0.4s;">
-		<div class="overlay-content">
+        <div class="overlay-content">
             <br><br>
             <p id="scoreTextField"></p>
-			<button id="resultsButton" onclick="showResults();">view results</button>
+            <button id="resultsButton" onclick="showResults();">view results</button>
             <br><br>
             <button onclick="restartGame();">play again</button>
-		</div>
-	</div>
+        </div>
+    </div>
 
     <div id="resultsNav" class="overlay" style="height: 0%; transition: 0.4s; z-index: 3; overflow-y: visible;">
-		<div class="overlay-content">
+        <div class="overlay-content">
             <p id="resultsTextField"></p>
-			<a href="javascript:void(0)" class="closebtn" id="resultsCloseButton" onclick="hideResults();">&times;</a>
-		</div>
-	</div>
+            <a href="javascript:void(0)" class="closebtn" id="resultsCloseButton" onclick="hideResults();">&times;</a>
+        </div>
+    </div>
 
     <script type="module" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule="" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"></script>

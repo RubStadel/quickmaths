@@ -119,9 +119,12 @@ button {
     background: black;
     font-size: 4.25vh;
     /* disable selection */
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
 }
 
 button:hover {
@@ -144,7 +147,7 @@ button:hover {
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin: 0; 
+    margin: 0;
     min-height: 11vh;
     max-height: 11vh;
 }
@@ -159,6 +162,13 @@ button:hover {
     position: absolute;
     left: 4vw;
     top: 1.5vh;
+}
+
+#timeFreeze {
+    color: transparent;
+    font-size: 4vh;
+    padding-left: 2.5vw;
+    margin-bottom: -1vh;
 }
 
 #stopPracticeButton {
@@ -189,6 +199,11 @@ button:hover {
     width: 90vw;
     height: 85%;
     margin-bottom: 2.5vh;
+}
+
+#submitAnswerButton:hover {
+    background-color: black;
+    color: white;
 }
 
 .numberButton {
